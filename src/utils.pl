@@ -133,3 +133,134 @@ extraer_dos_conceptos(Entrada, X, Y) :-
     primer_token(StrY, TokenY),
     atom_string(X, TokenX),
     atom_string(Y, TokenY).
+
+
+% =========================================================
+%  EXTENSIONES DE PARSEO (UFC)
+%
+%  Estas utilidades permiten entender frases mas naturales
+%  para consultar hechos como campeon/2, rankeado/3,
+%  evento_ufc/4, pelea/5, record_luchador/3, estilo_lucha/2.
+% =========================================================
+
+
+% --- Tokenizacion simple (quita puntuacion comun) ---
+
+tokenizar(Str, Tokens) :-
+    split_string(Str, " \t\n", " \t\n?!.,:;()[]{}\"", Raw),
+    exclude(=(""), Raw, Tokens).
+
+
+% --- Extraer substring despues de un prefijo (primer match) ---
+
+extraer_despues_de_prefijos(Entrada, [P|_], Resto) :-
+    sub_string(Entrada, Antes, Largo, _, P),
+    Inicio is Antes + Largo,
+    sub_string(Entrada, Inicio, _, 0, R0),
+    normalize_space(string(Resto), R0),
+    !.
+extraer_despues_de_prefijos(Entrada, [_|T], Resto) :-
+    extraer_despues_de_prefijos(Entrada, T, Resto).
+
+
+% --- Join de tokens con '_' para mapear "peso pesado" -> peso_pesado ---
+
+join_tokens_con_guion_bajo([H], H) :- !.
+join_tokens_con_guion_bajo([H|T], Out) :-
+    join_tokens_con_guion_bajo(T, Tail),
+    string_concat(H, "_", Tmp),
+    string_concat(Tmp, Tail, Out).
+
+
+% --- Resolver division desde una frase ---
+% Acepta "peso_pesado" o "peso pesado".
+
+resolver_division_desde_frase(Frase, Division) :-
+    tokenizar(Frase, Tokens),
+    Tokens \= [],
+    join_tokens_con_guion_bajo(Tokens, DivStr0),
+    string_lower(DivStr0, DivStr),
+    atom_string(DivAtom, DivStr),
+    ( campeon(DivAtom, _) ; rankeado(DivAtom, _, _) ; es_un(DivAtom, division_peso) ),
+    !,
+    Division = DivAtom.
+
+% Extrae division desde la entrada completa (busca despues de "de ").
+extraer_division(Entrada, Division) :-
+    ( extraer_despues_de_prefijos(Entrada, ["de ","division ","división "], Resto) ->
+        resolver_division_desde_frase(Resto, Division)
+    ;
+        fail
+    ).
+
+
+% --- Top N y division ---
+
+extraer_top_y_division(Entrada, N, Division) :-
+    tokenizar(Entrada, Tokens),
+    ( append(_, ["top", TokenN|Rest], Tokens), number_string(N0, TokenN) ->
+        N = N0,
+        rest_a_division(Rest, Division)
+    ;
+        % Si no viene numero: default 5
+        N = 5,
+        ( append(_, ["top","de"|Rest], Tokens) -> rest_a_division(Rest, Division)
+        ; append(_, ["top"|Rest], Tokens) -> rest_a_division(Rest, Division)
+        )
+    ).
+
+rest_a_division(RestTokens, Division) :-
+    % Si hay un "de", lo saltamos
+    ( RestTokens = ["de"|T] -> Tokens = T ; Tokens = RestTokens ),
+    Tokens \= [],
+    join_tokens_con_guion_bajo(Tokens, DivStr),
+    atom_string(DivAtom, DivStr),
+    ( campeon(DivAtom, _) ; rankeado(DivAtom, _, _) ; es_un(DivAtom, division_peso) ),
+    Division = DivAtom.
+
+
+% --- Posicion de ranking y division ---
+
+extraer_posicion_y_division(Entrada, Pos, Division) :-
+    tokenizar(Entrada, Tokens),
+    ( append(_, ["rankeado", TokenPos|Rest], Tokens)
+    ; append(_, ["ranking", TokenPos|Rest], Tokens)
+    ),
+    number_string(Pos, TokenPos),
+    rest_a_division(Rest, Division).
+
+
+% --- Numero de evento UFC (ej: "ufc 328") ---
+
+extraer_numero_evento(Entrada, Num) :-
+    tokenizar(Entrada, Tokens),
+    append(_, ["ufc", TokenNum|_], Tokens),
+    number_string(Num, TokenNum),
+    !.
+
+
+% --- Extraer nombre de luchador a partir de un prefijo ---
+
+extraer_nombre_luchador(Entrada, Prefijos, Nombre) :-
+    extraer_despues_de_prefijos(Entrada, Prefijos, Nombre).
+
+
+% --- Resolver luchador por nombre (case-insensitive) ---
+% 1) Match exacto ignorando mayusculas
+% 2) Si no hay exacto, permite substring SOLO si es unico
+
+resolver_luchador(NombreEntrada, NombreCanon) :-
+    normalize_space(string(N0), NombreEntrada),
+    string_lower(N0, NL),
+    ( candidato_luchador(NombreCanon, SL), SL = NL ->
+        !
+    ;
+        findall(Cand, (candidato_luchador(Cand, SL2), sub_string(SL2, _, _, _, NL)), Cands0),
+        sort(Cands0, Cands),
+        Cands = [NombreCanon]
+    ).
+
+candidato_luchador(NombreCanon, NombreLower) :-
+    ( record_luchador(NombreCanon, _, _) ; estilo_lucha(NombreCanon, _) ),
+    atom_string(NombreCanon, S),
+    string_lower(S, NombreLower).

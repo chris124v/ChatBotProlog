@@ -82,6 +82,50 @@ detectar_intencion(E, tipo, C) :-
 detectar_intencion(E, propiedades, C) :-
     contiene_alguna(E, ["que tiene ","propiedades de ","caracteristicas de "]),
     extraer_concepto(E, C).
+
+% UFC: Campeon actual por division: "quien es el campeon de X"
+detectar_intencion(E, campeon_division, D) :-
+    contiene_alguna(E, [
+        "quien es el campeon de ","quién es el campeon de ",
+        "quien es el campeón de ","quién es el campeón de ",
+        "campeon de ","campeón de ",
+        "campeon actual de ","campeón actual de "
+    ]),
+    extraer_division(E, D).
+
+% UFC: Ranking top N por division: "top 5 de X" / "top de X"
+detectar_intencion(E, top_division, info(N, D)) :-
+    contiene_alguna(E, ["top ","top de ","top 5", "top5"]),
+    extraer_top_y_division(E, N, D).
+
+% UFC: Un rankeado especifico: "rankeado 3 de X"
+detectar_intencion(E, rankeado_division, info(Pos, D)) :-
+    contiene_alguna(E, ["rankeado ","ranking "]),
+    extraer_posicion_y_division(E, Pos, D).
+
+% UFC: Listar eventos conocidos
+detectar_intencion(E, listar_eventos, _) :-
+    contiene_alguna(E, ["ultimos eventos","últimos eventos","ultimos 5 eventos","últimos 5 eventos","eventos ufc","eventos de ufc"]).
+
+% UFC: Peleas de un evento: "peleas de ufc 328"
+detectar_intencion(E, peleas_evento, Num) :-
+    contiene_alguna(E, ["peleas de ufc","peleas ufc","cartelera ufc"]),
+    extraer_numero_evento(E, Num).
+
+% UFC: Detalle de un evento: "que paso en ufc 328" / "evento ufc 328"
+detectar_intencion(E, detalle_evento, Num) :-
+    contiene_alguna(E, ["que paso en ufc","qué pasó en ufc","evento ufc","informacion de ufc","información de ufc","ufc "]),
+    extraer_numero_evento(E, Num).
+
+% UFC: Record de un luchador: "record de X" / "récord de X"
+detectar_intencion(E, record_luchador, Nombre) :-
+    contiene_alguna(E, ["record de ","récord de "]),
+    extraer_nombre_luchador(E, ["record de ","récord de "], Nombre).
+
+% UFC: Estilo de un luchador: "estilo de X"
+detectar_intencion(E, estilo_luchador, Nombre) :-
+    contiene_alguna(E, ["estilo de ","estilo de pelea de "]),
+    extraer_nombre_luchador(E, ["estilo de pelea de ","estilo de "], Nombre).
  
 % Verificar si dos conceptos estan relacionados
 detectar_intencion(E, relacionar, info(X, Y)) :-
@@ -159,6 +203,90 @@ manejar(relacionar, info(X, Y)) :-
         format("Bot: Si, '~w' y '~w' estan relacionados: comparten al menos una categoria en comun.~n", [X, Y])
     ;
         format("Bot: '~w' y '~w' no parecen estar relacionados segun mi conocimiento actual.~n", [X, Y])
+    ).
+
+% UFC: Campeon por division
+manejar(campeon_division, D) :-
+    ( campeon(D, Nombre) ->
+        format("Bot: El campeon de '~w' es ~w.~n", [D, Nombre])
+    ;
+        format("Bot: No tengo registrado el campeon para la division '~w'.~n", [D])
+    ).
+
+% UFC: Top N por division
+manejar(top_division, info(N, D)) :-
+    ( top_ranking(D, N, Lista) ->
+        format("Bot: Top ~d de '~w':~n", [N, D]),
+        escribir_ranking(Lista)
+    ;
+        format("Bot: No tengo rankings para la division '~w'.~n", [D])
+    ).
+
+% UFC: Rankeado N por division
+manejar(rankeado_division, info(Pos, D)) :-
+    ( rankeado(D, Pos, Nombre) ->
+        format("Bot: En '~w', el rankeado #~d es ~w.~n", [D, Pos, Nombre])
+    ;
+        format("Bot: No encuentro el rankeado #~d para '~w'.~n", [Pos, D])
+    ).
+
+% UFC: Listar eventos
+manejar(listar_eventos, _) :-
+    findall(Num-Titulo-Fecha-Ganador, evento_ufc(Num, Titulo, Fecha, Ganador), Eventos0),
+    ( Eventos0 \= [] ->
+        keysort(Eventos0, EventosAsc),
+        reverse(EventosAsc, Eventos),
+        write('Bot: Eventos conocidos:\n'),
+        escribir_eventos(Eventos)
+    ;
+        write('Bot: No tengo eventos registrados.\n')
+    ).
+
+% UFC: Detalle de evento (incluye peleas)
+manejar(detalle_evento, Num) :-
+    ( evento_ufc(Num, Titulo, Fecha, Ganador) ->
+        format("Bot: UFC ~d - ~w (~w). Ganador estelar: ~w.~n", [Num, Titulo, Fecha, Ganador]),
+        ( peleas_del_evento(Num, Peleas), Peleas \= [] ->
+            write('Bot: Peleas registradas:\n'),
+            escribir_peleas(Peleas)
+        ;
+            write('Bot: No tengo peleas registradas para ese evento.\n')
+        )
+    ;
+        format("Bot: No encuentro el evento UFC ~d en mi base de conocimiento.~n", [Num])
+    ).
+
+% UFC: Solo peleas de un evento
+manejar(peleas_evento, Num) :-
+    ( peleas_del_evento(Num, Peleas), Peleas \= [] ->
+        format("Bot: Peleas registradas para UFC ~d:\n", [Num]),
+        escribir_peleas(Peleas)
+    ;
+        format("Bot: No tengo peleas registradas para UFC ~d.~n", [Num])
+    ).
+
+% UFC: Record de un luchador
+manejar(record_luchador, NombreEntrada) :-
+    ( resolver_luchador(NombreEntrada, NombreCanon) ->
+        ( record_luchador(NombreCanon, V, D) ->
+            format("Bot: Record de ~w: ~d-~d (victorias-derrotas).~n", [NombreCanon, V, D])
+        ;
+            format("Bot: No tengo el record de ~w registrado.~n", [NombreCanon])
+        )
+    ;
+        write("Bot: No pude identificar a ese luchador. Prueba con el nombre completo (ej: 'khamzat chimaev').\n")
+    ).
+
+% UFC: Estilo de un luchador
+manejar(estilo_luchador, NombreEntrada) :-
+    ( resolver_luchador(NombreEntrada, NombreCanon) ->
+        ( estilo_lucha(NombreCanon, Estilo) ->
+            format("Bot: Estilo de ~w: ~w.~n", [NombreCanon, Estilo])
+        ;
+            format("Bot: No tengo el estilo de ~w registrado.~n", [NombreCanon])
+        )
+    ;
+        write("Bot: No pude identificar a ese luchador. Prueba con el nombre completo (ej: 'alex pereira').\n")
     ).
  
 % Guardar nuevo concepto dinamicamente
@@ -247,12 +375,55 @@ mostrar_ayuda :-
     write("  que tipo es khamzat chimaev\n"),
     write("  que tiene peso_pesado\n"),
     write("  relacionados boxeo y kickboxing\n"),
+    write("  quien es el campeon de peso_pesado\n"),
+    write("  top 5 de peso_ligero\n"),
+    write("  rankeado 3 de peso_mosca\n"),
+    write("  ultimos eventos\n"),
+    write("  que paso en ufc 328\n"),
+    write("  peleas de ufc 328\n"),
+    write("  record de khamzat chimaev\n"),
+    write("  estilo de alex pereira\n"),
     write("  bjj es sinonimo de jiu jitsu brasileno\n"),
     write("\n  --- Comandos Generales ---\n"),
     write("  aprender que X es Y\n"),
     write("  olvidar X\n"),
     write("  ayuda (ver este menu)\n"),
     write("  salir\n").
+
+
+% ---------------------------------------------------------
+%  Helpers de impresion / agregacion (UFC)
+% ---------------------------------------------------------
+
+top_ranking(Division, N, Lista) :-
+    findall(Pos-Nombre, rankeado(Division, Pos, Nombre), Pairs),
+    Pairs \= [],
+    keysort(Pairs, Sorted),
+    tomar(N, Sorted, Lista).
+
+tomar(0, _, []) :- !.
+tomar(_, [], []) :- !.
+tomar(N, [H|T], [H|R]) :-
+    N1 is N - 1,
+    tomar(N1, T, R).
+
+escribir_ranking([]).
+escribir_ranking([Pos-Nombre|T]) :-
+    format("  #~d ~w~n", [Pos, Nombre]),
+    escribir_ranking(T).
+
+escribir_eventos([]).
+escribir_eventos([Num-Titulo-Fecha-Ganador|T]) :-
+    format("  UFC ~d: ~w (~w) - ganador estelar: ~w~n", [Num, Titulo, Fecha, Ganador]),
+    escribir_eventos(T).
+
+peleas_del_evento(Num, Peleas) :-
+    findall(A-B-Ganador-Metodo, pelea(Num, A, B, Ganador, Metodo), Peleas).
+
+escribir_peleas([]).
+escribir_peleas([A-B-Ganador-Metodo|T]) :-
+    format("  ~w vs ~w -> ~w (~w)~n", [A, B, Ganador, Metodo]),
+    escribir_peleas(T).
  
  
 % Mensaje de despedida al terminar la sesion.

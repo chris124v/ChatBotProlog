@@ -1,19 +1,14 @@
-% =========================================================
-%  BASE DE CONOCIMIENTO - MIEMBRO 2 (UFC)
-%  Tema: Ultimate Fighting Championship - MMA
-%  Autor: [Tu Nombre]
-%  Actualizado: Mayo 2026 - UFC 328
+
+%  Tema: Ultimate Fighting Championship - MMA (UFC)
+%  Autor: Christopher Vargas
 %  Responsabilidades:
 %    - Campeones actuales de cada división
-%    - Top 15 ranqueados de cada división
+%    - Top 5 ranqueados de cada división
 %    - Estilos de lucha (boxing, kickboxing, judo, bjj, etc)
 %    - Últimos 5 eventos (UFC 324, 325, 326, 327, 328)
 %    - Información general de UFC
-% =========================================================
  
-% ---------------------------------------------------------
-%  DECLARACIONES DINAMICAS
-% ---------------------------------------------------------
+%  Declaraciones dinamicas
  
 :- dynamic concepto/2.
 :- multifile concepto/2.
@@ -39,11 +34,9 @@
 :- multifile pelea/5.
  
  
-% =========================================================
-%  CONCEPTOS GENERALES UFC
-% =========================================================
+%  Conceptos Generales de la UFC y MMA
  
-% ----- DEFINICIONES DE CONCEPTOS -----
+% Definiciones
 concepto(ufc,
     'Ultimate Fighting Championship - organizacion de artes marciales mixtas mas grande del mundo').
 concepto(mma,
@@ -103,7 +96,7 @@ concepto(peso_mosca,
     'division mas pequena de UFC, bajo 135 libras').
  
  
-% ----- JERARQUIAS DE CATEGORIA -----
+% Jerarquias de Categorías (es_un/2)
 es_un(boxeo, estilo_lucha_de_pie).
 es_un(kickboxing, estilo_lucha_de_pie).
 es_un(muay_thai, estilo_lucha_de_pie).
@@ -138,7 +131,7 @@ es_un(luchador_mma, atleta_profesional).
 es_un(campeon_ufc, luchador_mma).
  
  
-% ----- PROPIEDADES -----
+% Propiedades y hechos (tiene/2)
 tiene(ufc, transmisiones_globales).
 tiene(ufc, eventos_mensuales).
 tiene(ufc, multiples_divisiones).
@@ -169,7 +162,7 @@ tiene(peso_gallo, agilidad_tecnica).
 tiene(peso_mosca, velocidad_maxima).
  
  
-% ----- SINONIMOS -----
+% Algunos sinonimos
 sinonimo(mma, artes_marciales_mixtas).
 sinonimo(bjj, jiu_jitsu_brasileno).
 sinonimo(striking, lucha_de_pie).
@@ -181,7 +174,7 @@ sinonimo(champ, campeon).
 sinonimo(fighter, luchador_mma).
  
  
-% ----- USOS -----
+% Usos
 sirve_para(ufc, 'entretenimiento deportivo, competencia de alto nivel, desarrollo de atletas').
 sirve_para(boxeo, 'defensa personal, acondicionamiento cardiovascular, tecnicas de golpeo precisas').
 sirve_para(kickboxing, 'combinacion de golpes y patadas, defensa integral de cuerpo').
@@ -189,11 +182,10 @@ sirve_para(jiu_jitsu_brasileno, 'control del oponente, sumisiones, defensa contr
 sirve_para(judo, 'lanzamientos y derribos, control de posicion, defensa sin golpes').
 sirve_para(wrestling, 'derribos y control posicional, dominio en el suelo').
 sirve_para(muay_thai, 'combinaciones de golpes, rodillas y codos, clinch defensivo').
+
+% Info extra sobre la UFC
  
- 
-% =========================================================
-%  CAMPEONES ACTUALES UFC (Mayo 2026)
-% =========================================================
+%  Campeones actuales por division 
 
 campeon(peso_pesado, 'Tom Aspinall').
 campeon(peso_semipesado, 'Alex Pereira').
@@ -204,60 +196,59 @@ campeon(peso_pluma, 'Alexander Volkanovski').
 campeon(peso_gallo, 'Petr Yan').
 campeon(peso_mosca, 'Joshua Van').
  
-% =========================================================
-%  TOP 5 RANKEADOS POR DIVISION (Actualizado 2026)
-% =========================================================
+
+%  TOP 5 Rankeados por division
  
-% ----- PESO PESADO ----- 
+% Peso Pesado (265+ libras)
 rankeado(peso_pesado, 1, 'Ciryl Gane').
 rankeado(peso_pesado, 2, 'Sergei Pavlovich').
 rankeado(peso_pesado, 3, 'Alexander Volkov').
 rankeado(peso_pesado, 4, 'Curtis Blaydes').
 rankeado(peso_pesado, 5, 'Jailton Almeida').
  
-% ----- PESO SEMIPESADO ----- 
+% Peso semipesado (205 libras)
 rankeado(peso_semipesado, 1, 'Magomed Ankalaev').
 rankeado(peso_semipesado, 2, 'Jiri Prochazka').
 rankeado(peso_semipesado, 3, 'Jamahal Hill').
 rankeado(peso_semipesado, 4, 'Aleksandar Rakic').
 rankeado(peso_semipesado, 5, 'Khalil Rountree Jr').
 
-% ----- PESO MEDIO (185 libras) -----
+% Peso Medio (185 libras)
 rankeado(peso_medio, 1, 'Sean Strickland').
 rankeado(peso_medio, 2, 'Khamzat Chimaev').
 rankeado(peso_medio, 3, 'Israel Adesanya').
 rankeado(peso_medio, 4, 'Robert Whittaker').
 rankeado(peso_medio, 5, 'Nassourdine Imavov').
 
-% ----- PESO WELTER (170 libras) -----
+% Peso Welter (170 libras)
 rankeado(peso_welter, 1, 'Belal Muhammad').
 rankeado(peso_welter, 2, 'Shavkat Rakhmonov').
 rankeado(peso_welter, 3, 'Leon Edwards').
 rankeado(peso_welter, 4, 'Jack Della Maddalena').
 rankeado(peso_welter, 5, 'Ian Machado Garry').
 
-% ----- PESO LIGERO (155 libras) -----
+% Peso ligero (155 libras)
 rankeado(peso_ligero, 1, 'Arman Tsarukyan').
 rankeado(peso_ligero, 2, 'Charles Oliveira').
 rankeado(peso_ligero, 3, 'Justin Gaethje').
 rankeado(peso_ligero, 4, 'Dustin Poirier').
 rankeado(peso_ligero, 5, 'Mateusz Gamrot').
 
-% ----- PESO PLUMA (145 libras) -----
+% Peso Pluma (145 libras)
 rankeado(peso_pluma, 1, 'Max Holloway').
 rankeado(peso_pluma, 2, 'Diego Lopes').
 rankeado(peso_pluma, 3, 'Movsar Evloev').
 rankeado(peso_pluma, 4, 'Yair Rodriguez').
 rankeado(peso_pluma, 5, 'Brian Ortega').
 
-% ----- PESO GALLO (135 libras) -----
+% Peso Gallo (135 libras)
 rankeado(peso_gallo, 1, 'Merab Dvalishvili').
 rankeado(peso_gallo, 2, 'Umar Nurmagomedov').
 rankeado(peso_gallo, 3, 'Cory Sandhagen').
 rankeado(peso_gallo, 4, 'Sean OMalley').
 rankeado(peso_gallo, 5, 'Song Yadong').
 
-% ----- PESO MOSCA (125 libras) -----
+% Peso Mosca (125 libras)
 rankeado(peso_mosca, 1, 'Tatsuro Taira').
 rankeado(peso_mosca, 2, 'Brandon Royval').
 rankeado(peso_mosca, 3, 'Kai Kara-France').
@@ -265,9 +256,7 @@ rankeado(peso_mosca, 4, 'Brandon Moreno').
 rankeado(peso_mosca, 5, 'Amir Albazi').
 
  
-% =========================================================
-%  ULTIMOS 5 EVENTOS NUMERADOS UFC (2025-2026)
-% =========================================================
+% Ultimos eventos de UFC (2025-2026)
  
 evento_ufc(324, 'UFC 324: Gaethje vs. Pimblett', '2025-01-25', 'Justin Gaethje').
 evento_ufc(325, 'UFC 325: Volkanovski vs. Lopes', '2025-02-15', 'Alexander Volkanovski').
@@ -276,9 +265,7 @@ evento_ufc(327, 'UFC 327: Prochazka vs. Ulberg', '2025-04-19', 'Carlos Ulberg').
 evento_ufc(328, 'UFC 328: Chimaev vs. Strickland', '2026-05-09', 'Sean Strickland').
  
  
-% =========================================================
-%  PELEAS PRINCIPALES Y RESULTADOS ULTIMOS EVENTOS
-% =========================================================
+% Peleas principales y resultados de los ultimos eventos
  
 % UFC 324 - Main Card
 pelea(324, 'Justin Gaethje', 'Paddy Pimblett', 'Justin Gaethje', 'decision_unanime').
@@ -302,9 +289,7 @@ pelea(328, 'Joshua Van', 'Tatsuro Taira', 'Joshua Van', 'nocaut_ronda3').
 
  
  
-% =========================================================
-%  RECORDS Y ESTILOS DE COMBATE
-% =========================================================
+% Records y estilos de combate
  
 % Estilos de combate de luchadores destacados
 estilo_lucha('Khamzat Chimaev', 'wrestling_grappling').
@@ -336,7 +321,7 @@ estilo_lucha('Yaroslav Amosov', 'wrestling_invicto').
 estilo_lucha('Joel Alvarez', 'boxeo_rapido').
  
  
-% Records de luchadores prominentes (Actualizado 2026)
+% Records de luchadores prominentes 
 record_luchador('Khamzat Chimaev', 15, 1).
 record_luchador('Sean Strickland', 29, 7).
 record_luchador('Joshua Van', 21, 2).

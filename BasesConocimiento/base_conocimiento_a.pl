@@ -1,17 +1,13 @@
-% =========================================================
-%  Tema: Lenguajes de Programación y Conceptos CS
+
+%  Tema: Lenguajes de programacion y conceptos de Ciencias de la Computacion.
 %  Autor: Andrey Jimenez
-%  Curso: Lenguajes de Programacion - IC 4700
-%  =========================================================
 
 
-% ---------------------------------------------------------
-%  DECLARACIONES DINAMICAS
+%  Declaraciones Dinamicas y Multifile
 %
 %  Estas declaraciones le dicen a Prolog que los predicados
 %  pueden cambiar durante la ejecucion (usando assertz/retract).
 %  Sin esto, Prolog no permitiria agregar hechos en tiempo real.
-% ---------------------------------------------------------
 
 :- dynamic concepto/2.
 :- multifile concepto/2.
@@ -25,25 +21,15 @@
 :- multifile sirve_para/2.
 
 
-% =========================================================
-%  BASE DE CONOCIMIENTO INICIAL
-%
-%  Tema: Lenguajes de programacion y conceptos de
-%        Ciencias de la Computacion.
-%
 %  Organizada en cinco tipos de hechos:
 %    concepto/2    - define que ES algo
 %    es_un/2       - establece jerarquias de categoria
 %    tiene/2       - describe propiedades de un concepto
 %    sinonimo/2    - equivalencias entre terminos
 %    sirve_para/2  - usos principales de un concepto
-% =========================================================
 
-
-% ---------------------------------------------------------
-%  DEFINICIONES (concepto/2)
+%  Definciones (concepto/2)
 %  Cada hecho responde "que es" para un tema especifico.
-% ---------------------------------------------------------
 
 concepto(prolog,
     'lenguaje de programacion logica basado en calculo de predicados').
@@ -117,15 +103,12 @@ concepto(estructura_datos,
 concepto(complejidad_algoritmica,
     'medida de los recursos (tiempo o memoria) que necesita un algoritmo segun el tamano del problema').
 
-
-% ---------------------------------------------------------
-%  JERARQUIAS DE CATEGORIA (es_un/2)
+%  Jerarquias de Categorías (es_un/2)
 %
 %  Organizadas en cadenas para permitir inferencia transitiva.
 %  Ejemplo: prolog -> lenguaje_logico -> lenguaje_programacion
-%           Esto permite inferir que prolog es lenguaje_programacion
-%           aunque no este declarado directamente.
-% ---------------------------------------------------------
+%  Esto permite inferir que prolog es lenguaje_programacion
+%  aunque no este declarado directamente.
 
 % Lenguajes especificos a su paradigma
 es_un(prolog,      lenguaje_logico).
@@ -170,15 +153,11 @@ es_un(herramienta_desarrollo, herramienta_informatica).
 es_un(machine_learning, inteligencia_artificial).
 es_un(inteligencia_artificial, campo_computacional).
 
-
-% ---------------------------------------------------------
-%  PROPIEDADES (tiene/2)
+%  Propiedades (tiene/2)
 %
 %  Las propiedades definidas en una categoria padre son
 %  heredadas automaticamente por sus subcategorias.
-%  Ejemplo: lenguaje_logico tiene inferencia_automatica
-%           Por lo tanto, prolog (que es lenguaje_logico) tambien la tiene.
-% ---------------------------------------------------------
+%  Ejemplo: lenguaje_logico tiene inferencia_automatica por lo tanto, prolog (que es lenguaje_logico) tambien la tiene.
 
 % Propiedades de los paradigmas (heredadas por todos sus lenguajes)
 tiene(lenguaje_logico,            inferencia_automatica).
@@ -207,14 +186,11 @@ tiene(rust,        seguridad_de_memoria_en_compilacion).
 tiene(javascript,  ejecucion_en_navegador).
 tiene(javascript,  tipado_dinamico).
 
-
-% ---------------------------------------------------------
-%  SINONIMOS (sinonimo/2)
+%  Sinonimos (sinonimo/2)
 %
 %  Permiten al chatbot entender abreviaciones y variantes.
 %  El motor de inferencias usa estos pares para resolver
 %  consultas aunque el usuario use el termino alternativo.
-% ---------------------------------------------------------
 
 sinonimo(pl,   programacion_logica).
 sinonimo(ia,   inteligencia_artificial).
@@ -227,13 +203,11 @@ sinonimo(ml,   machine_learning).
 sinonimo(jvm,  maquina_virtual_jvm).
 
 
-% ---------------------------------------------------------
-%  USOS (sirve_para/2)
+%  Usos (sirve_para/2)
 %
 %  Describe el proposito principal de un lenguaje o concepto.
 %  Tambien se heredan: si no hay uso directo para X,
 %  se busca en el tipo padre de X.
-% ---------------------------------------------------------
 
 sirve_para(prolog,
     'sistemas expertos, resolucion de problemas logicos e inteligencia artificial').

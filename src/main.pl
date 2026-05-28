@@ -19,8 +19,13 @@
 :- [utils].          % Utilidades de procesamiento de texto
  
 % Cargar bases de conocimiento de cada miembro del grupo
-:- consult('BasesConocimiento/base_conocimiento_a.pl').     % Base del Miembro 1 (50+ hechos - Lenguajes)
-:- consult('BasesConocimiento/base_conocimiento_c.pl').     % Base del Miembro 2 (50+ hechos - UFC)
+:- prolog_load_context(directory, SrcDir),
+   directory_file_path(SrcDir, '..', RootDir),
+   directory_file_path(RootDir, 'BasesConocimiento', KBDir),
+   directory_file_path(KBDir, 'base_conocimiento_a.pl', KBA),
+   directory_file_path(KBDir, 'base_conocimiento_c.pl', KBC),
+   consult(KBA),                                            % Base del Miembro 1 (50+ hechos - Lenguajes)
+   consult(KBC).                                            % Base del Miembro 2 (50+ hechos - UFC)
 % :- consult('BasesConocimiento/base_conocimiento_d.pl').   % Base del Miembro 3 (50+ hechos - Por crear)
 % :- consult('BasesConocimiento/base_conocimiento_i.pl').   % Base del Miembro 4 (50+ hechos - Por crear)
  
