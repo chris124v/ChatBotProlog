@@ -1,0 +1,261 @@
+% =========================================================
+%  SECCION 2.7 - FLUJO CONVERSACIONAL
+%
+%  Implementa la conversacion completa usando:
+%    - Recursividad (sin ningun ciclo imperativo)
+%    - Backtracking (para detectar intencion y listar respuestas)
+%    - Predicados dinamicos (para aprendizaje en tiempo real)
+%    - Reglas declarativas (cada comportamiento es una regla Prolog)
+% =========================================================
+ 
+ 
+% --- Punto de entrada ---
+% El usuario inicia el chatbot ejecutando: ?- inicio.
+ 
+inicio :-
+    write('=================================================\n'),
+    write('   ChatBot Prolog - Razonamiento Logico\n'),
+    write('=================================================\n'),
+    write('Bot: Hola! Soy un chatbot que razona con logica y legalmente si piensa.\n'),
+    write('     Escribe "ayuda" para ver los comandos.\n\n'),
+    conversar.
+ 
+ 
+% --- Loop conversacional principal ---
+%
+% Mantiene la conversacion activa mediante recursion pura.
+% No usa ninguna construccion imperativa (while, for, repeat con side-effects).
+%
+% Flujo:
+%   1. Muestra prompt y lee entrada del usuario
+%   2. Si el usuario se despide, termina
+%   3. Si no, procesa la entrada y vuelve a llamarse a si mismo
+ 
+conversar :-
+    write('Tu: '),
+    leer_entrada(Entrada),
+    ( es_despedida(Entrada) ->
+        despedirse
+    ;
+        procesar(Entrada),
+        nl,
+        conversar        % Llamada recursiva: reemplaza el ciclo imperativo
+    ).
+ 
+ 
+% --- Procesador de entrada ---
+%
+% Detecta la intencion del usuario (que quiere hacer) y la delega
+% al manejador correspondiente. El corte (!) asegura que solo se
+% use la primera intencion detectada.
+ 
+procesar(Entrada) :-
+    detectar_intencion(Entrada, Intencion, Dato),
+    !,
+    manejar(Intencion, Dato).
+ 
+ 
+% --- Deteccion de intencion por palabras clave ---
+%
+% Cada clausula identifica una intencion diferente buscando
+% frases clave en la entrada del usuario con sub_string.
+%
+% El backtracking de Prolog prueba las clausulas en orden
+% hasta encontrar la primera que haga match.
+ 
+% Preguntas de definicion: "que es X", "explique X", "defina X", etc.
+detectar_intencion(E, definir, C) :-
+    contiene_alguna(E, ["que es ","explique ","defina ","define ","describe "]),
+    extraer_concepto(E, C).
+ 
+% Preguntas de uso: "para que sirve X", "para que se usa X"
+detectar_intencion(E, uso, C) :-
+    contiene_alguna(E, ["para que sirve","para que se usa","como se usa"]),
+    extraer_concepto(E, C).
+ 
+% Preguntas de categoria: "que tipo es X", "que clase es X"
+detectar_intencion(E, tipo, C) :-
+    contiene_alguna(E, ["que tipo es","que clase es","que categoria es"]),
+    extraer_concepto(E, C).
+ 
+% Preguntas de propiedades: "que tiene X", "propiedades de X"
+detectar_intencion(E, propiedades, C) :-
+    contiene_alguna(E, ["que tiene ","propiedades de ","caracteristicas de "]),
+    extraer_concepto(E, C).
+ 
+% Verificar si dos conceptos estan relacionados
+detectar_intencion(E, relacionar, info(X, Y)) :-
+    contiene_alguna(E, ["relacionados","se relacionan","tienen relacion"]),
+    extraer_dos_conceptos(E, X, Y).
+ 
+% Aprendizaje de un nuevo concepto: "aprender que X es Y"
+detectar_intencion(E, aprender, info(C, D)) :-
+    sub_string(E, _, _, _, "aprender que "),
+    extraer_aprendizaje(E, C, D).
+ 
+% Aprendizaje de sinonimo: "X es sinonimo de Y" o "X significa Y"
+detectar_intencion(E, nuevo_sinonimo, info(A, B)) :-
+    contiene_alguna(E, ["es sinonimo de","significa "]),
+    extraer_sinonimo(E, A, B).
+ 
+% Olvidar un concepto: "olvidar X" — usa retract para eliminar de la BD dinamica
+detectar_intencion(E, olvidar, C) :-
+    contiene_alguna(E, ["olvidar ","eliminar concepto ","borrar "]),
+    extraer_concepto(E, C).
+ 
+% Solicitud de ayuda
+detectar_intencion(E, ayuda, _) :-
+    contiene_alguna(E, ["ayuda","help","comandos","que puedes"]).
+ 
+% Fallback: si ninguna clausula anterior hizo match
+detectar_intencion(_, desconocido, _).
+ 
+ 
+% --- Manejadores de respuesta ---
+%
+% Cada clausula manejar/2 produce la respuesta apropiada
+% para una intencion detectada.
+ 
+% Responder: que es X
+manejar(definir, C) :-
+    ( concepto_resuelto(C, Def) ->
+        format("Bot: ~w es ~w~n", [C, Def])
+    ;
+        % El chatbot no conoce el concepto, activa el aprendizaje
+        aprender_nuevo_concepto(C)
+    ).
+ 
+% Responder: para que sirve X
+manejar(uso, C) :-
+    ( sirve_para_inferido(C, Uso) ->
+        format("Bot: ~w sirve para ~w~n", [C, Uso])
+    ;
+        format("Bot: No tengo informacion sobre el uso de '~w'.~n", [C])
+    ).
+ 
+% Responder: que tipo de cosa es X (usa inferencia transitiva)
+manejar(tipo, C) :-
+    findall(T, es_tipo(C, T), Tipos),
+    ( Tipos \= [] ->
+        format("Bot: '~w' es de tipo: ", [C]),
+        escribir_lista(Tipos)
+    ;
+        format("Bot: No se en que categoria esta '~w'.~n", [C])
+    ).
+ 
+% Responder: que propiedades tiene X (usa herencia de propiedades)
+manejar(propiedades, C) :-
+    findall(P, tiene_inferido(C, P), Props),
+    ( Props \= [] ->
+        format("Bot: '~w' tiene: ", [C]),
+        escribir_lista(Props)
+    ;
+        format("Bot: No conozco propiedades de '~w'.~n", [C])
+    ).
+ 
+% Responder: estan relacionados X e Y (usa inferencia de relaciones)
+manejar(relacionar, info(X, Y)) :-
+    ( relacionados(X, Y) ->
+        format("Bot: Si, '~w' y '~w' estan relacionados: comparten al menos una categoria en comun.~n", [X, Y])
+    ;
+        format("Bot: '~w' y '~w' no parecen estar relacionados segun mi conocimiento actual.~n", [X, Y])
+    ).
+ 
+% Guardar nuevo concepto dinamicamente
+manejar(aprender, info(C, D)) :-
+    % assertz agrega el hecho al final de la BD; estara disponible de inmediato
+    assertz(concepto(C, D)),
+    format("Bot: Entendido! Aprendi que '~w' es ~w~n", [C, D]).
+ 
+% Guardar nuevo sinonimo dinamicamente
+manejar(nuevo_sinonimo, info(A, B)) :-
+    assertz(sinonimo(A, B)),
+    format("Bot: Anotado! Ahora se que '~w' y '~w' son equivalentes.~n", [A, B]).
+ 
+% Olvidar un concepto usando retract — elimina el hecho de la base de conocimiento en tiempo real
+manejar(olvidar, C) :-
+    ( retract(concepto(C, _)) ->
+        format("Bot: Listo, olvide todo lo que sabia sobre '~w'.~n", [C])
+    ;
+        format("Bot: No tenia ningun concepto guardado para '~w'.~n", [C])
+    ).
+ 
+% Mostrar ayuda
+manejar(ayuda, _) :-
+    mostrar_ayuda.
+ 
+% Respuesta generica cuando no se reconocio la entrada
+manejar(desconocido, _) :-
+    write("Bot: No entendi eso. Escribe 'ayuda' para ver los comandos disponibles.\n").
+ 
+ 
+% --- Aprendizaje dinamico interactivo ---
+%
+% Cuando el chatbot no conoce un concepto, le pregunta al usuario.
+% La respuesta se guarda con assertz para usarla en consultas futuras.
+% Este es un ejemplo directo de aprendizaje dinamico con predicados dinamicos.
+ 
+aprender_nuevo_concepto(C) :-
+    format("Bot: No conozco '~w'. Que es? (escribe la definicion o Enter para omitir)~n", [C]),
+    write('Tu: '),
+    read_line_to_string(user_input, Def),
+    ( Def \= "" ->
+        atom_string(DefAtom, Def),
+        assertz(concepto(C, DefAtom)),
+        format("Bot: Gracias! Ahora recordare que '~w' es ~w~n", [C, DefAtom])
+    ;
+        write("Bot: Sin problema. Puedes ensenarme despues con: aprender que X es Y\n")
+    ).
+ 
+ 
+% --- Deteccion de despedida ---
+%
+% Lista de expresiones que indican que el usuario quiere terminar.
+ 
+es_despedida(E) :-
+    contiene_alguna(E, ["salir","adios","exit","bye","chao","hasta luego","finalizar"]).
+ 
+ 
+% --- Salida formateada ---
+ 
+% Escribe una lista de elementos separados por coma.
+% Caso base: un solo elemento, termina con salto de linea.
+% Caso recursivo: escribe el primero, coma, y llama recursivamente.
+ 
+escribir_lista([H]) :-
+    write(H), nl.
+escribir_lista([H|T]) :-
+    write(H), write(', '),
+    escribir_lista(T).
+ 
+ 
+% Muestra el menu de ayuda al usuario.
+ 
+mostrar_ayuda :-
+    write("Bot: Puedo responder preguntas como:\n"),
+    write("\n  --- Lenguajes de Programacion ---\n"),
+    write("  que es prolog\n"),
+    write("  explique recursion\n"),
+    write("  para que sirve python\n"),
+    write("  que tipo es java\n"),
+    write("  que tiene haskell\n"),
+    write("  relacionados prolog y haskell\n"),
+    write("  js es sinonimo de javascript\n"),
+    write("\n  --- UFC y Artes Marciales ---\n"),
+    write("  que es boxeo\n"),
+    write("  para que sirve wrestling\n"),
+    write("  que tipo es khamzat chimaev\n"),
+    write("  que tiene peso_pesado\n"),
+    write("  relacionados boxeo y kickboxing\n"),
+    write("  bjj es sinonimo de jiu jitsu brasileno\n"),
+    write("\n  --- Comandos Generales ---\n"),
+    write("  aprender que X es Y\n"),
+    write("  olvidar X\n"),
+    write("  ayuda (ver este menu)\n"),
+    write("  salir\n").
+ 
+ 
+% Mensaje de despedida al terminar la sesion.
+ 
+despedirse :-
+    write("Bot: Hasta luego! Fue un placer conversar contigo.\n").
