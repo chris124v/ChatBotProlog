@@ -20,9 +20,10 @@
    directory_file_path(RootDir, 'BasesConocimiento', KBDir),
    directory_file_path(KBDir, 'base_conocimiento_a.pl', KBA),
    directory_file_path(KBDir, 'base_conocimiento_c.pl', KBC),
+   directory_file_path(KBDir, 'base_conocimiento_d.pl', KBD),
    consult(KBA),                                            % Base del Miembro 1 (50+ hechos - Lenguajes)
-   consult(KBC).                                            % Base del Miembro 2 (50+ hechos - UFC)
-% :- consult('BasesConocimiento/base_conocimiento_d.pl').   % Base del Miembro 3 (50+ hechos - Por crear)
+   consult(KBC),                                            % Base del Miembro 2 (50+ hechos - UFC)
+   consult(KBD).                                            % Base del Miembro 3 (50+ hechos - Ciencias)
 % :- consult('BasesConocimiento/base_conocimiento_i.pl').   % Base del Miembro 4 (50+ hechos - Por crear)
  
 % Punto de entrada: ejecutar ?- inicio.

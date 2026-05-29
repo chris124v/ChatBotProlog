@@ -80,6 +80,11 @@ detectar_intencion(E, campeon_division, D) :-
     ]),
     extraer_division(E, D).
 
+% Preguntas de definicion por persona: "quien es X"
+detectar_intencion(E, definir, C) :-
+    contiene_alguna(E, ["quien es ","quién es "]),
+    extraer_concepto(E, C).
+
 % UFC: Ranking top N por division: "top 5 de X" / "top de X"
 detectar_intencion(E, top_division, info(N, D)) :-
     contiene_alguna(E, ["top ","top de ","top 5", "top5"]),
@@ -161,7 +166,7 @@ manejar(uso, C) :-
     ( sirve_para_inferido(C, Uso) ->
         format("Bot: ~w sirve para ~w~n", [C, Uso])
     ;
-        format("Bot: No tengo informacion sobre el uso de '~w'.~n", [C])
+        aprender_nuevo_uso(C)
     ).
  
 % Responder: que tipo de cosa es X (usa inferencia transitiva)
@@ -171,7 +176,7 @@ manejar(tipo, C) :-
         format("Bot: '~w' es de tipo: ", [C]),
         escribir_lista(Tipos)
     ;
-        format("Bot: No se en que categoria esta '~w'.~n", [C])
+        aprender_nuevo_tipo(C)
     ).
  
 % Responder: que propiedades tiene X (usa herencia de propiedades)
@@ -181,7 +186,7 @@ manejar(propiedades, C) :-
         format("Bot: '~w' tiene: ", [C]),
         escribir_lista(Props)
     ;
-        format("Bot: No conozco propiedades de '~w'.~n", [C])
+        aprender_nueva_propiedad(C)
     ).
  
 % Responder: estan relacionados X e Y (usa inferencia de relaciones)
@@ -320,6 +325,47 @@ aprender_nuevo_concepto(C) :-
         format("Bot: Gracias! Ahora recordare que '~w' es ~w~n", [C, DefAtom])
     ;
         write("Bot: Sin problema. Puedes ensenarme despues con: aprender que X es Y\n")
+    ).
+
+
+% Aprendizaje dinamico interactivo para otras intenciones
+
+aprender_nuevo_uso(C) :-
+    format("Bot: No tengo informacion sobre el uso de '~w'. Para que sirve? (escribe el uso, sin 'sirve para', o Enter para omitir)~n", [C]),
+    write('Tu: '),
+    read_line_to_string(user_input, UsoStr),
+    ( UsoStr \= "" ->
+        quitar_prefijos(UsoStr, ["sirve para ","para ","sirve "], UsoStr0),
+        normalize_space(string(UsoLimpio), UsoStr0),
+        atom_string(UsoAtom, UsoLimpio),
+        assertz(sirve_para(C, UsoAtom)),
+        format("Bot: Perfecto! Ahora se que '~w' sirve para ~w~n", [C, UsoAtom])
+    ;
+        write("Bot: Sin problema. Si luego lo descubres, puedes volver a preguntar y ensenarmelo.\n")
+    ).
+
+aprender_nuevo_tipo(C) :-
+    format("Bot: No se en que categoria esta '~w'. Que tipo/clase es? (escribe el tipo o Enter para omitir)~n", [C]),
+    write('Tu: '),
+    read_line_to_string(user_input, TipoStr),
+    ( TipoStr \= "" ->
+        normalizar_identificador(TipoStr, Tipo),
+        assertz(es_un(C, Tipo)),
+        format("Bot: Entendido! Aprendi que '~w' es un '~w'.~n", [C, Tipo])
+    ;
+        write("Bot: Sin problema. Si luego lo descubres, puedes volver a preguntar y ensenarmelo.\n")
+    ).
+
+aprender_nueva_propiedad(C) :-
+    format("Bot: No conozco propiedades de '~w'. Dime una propiedad/caracteristica: (o Enter para omitir)~n", [C]),
+    write('Tu: '),
+    read_line_to_string(user_input, PropStr),
+    ( PropStr \= "" ->
+        normalizar_identificador(PropStr, Prop),
+        assertz(tiene(C, Prop)),
+        format("Bot: Listo! Ahora recordare que '~w' tiene '~w'.~n", [C, Prop])
+    ;
+        write("Bot: Sin problema. Puedes ensenarme despues si quieres.\n")
     ).
  
  

@@ -5,8 +5,9 @@ En esta seccion se incluyen preguntas (y comandos) que puede responder el chatbo
 Notas:
 - Puedes escribirlas en minusculas (el bot normaliza la entrada).
 - Para conceptos de varias palabras se recomienda usar guion bajo, por ejemplo: `inteligencia_artificial`, `programacion_logica`, `jiu_jitsu_brasileno`.
+- Tambien puedes escribir conceptos con espacios; el bot los normaliza a un identificador (ej: "inteligencia artificial" -> `inteligencia_artificial`).
 
-## Base de Conocimiento Computacion (50)
+## Base de Conocimiento Computacion (70)
 
 1. que es prolog
 2. explique prolog
@@ -65,7 +66,33 @@ Notas:
 
 50. que es type_inference
 
-## Base de Conocimiento UFC (50)
+51. aprender que Alan Turing es pionero de la computacion
+52. quien es Alan Turing
+53. quien es alan turing
+
+54. aprender que pl significa programacion logica
+55. que es pl
+56. que es programacion logica
+
+57. para que sirve calculo lambda
+58. (cuando el bot pregunte) sirve para describir funciones y computacion
+59. para que sirve calculo lambda
+
+60. que tipo es calculo lambda
+61. (cuando el bot pregunte) modelo matematico
+62. que tipo es calculo lambda
+
+63. que tiene calculo lambda
+64. (cuando el bot pregunte) abstraccion
+65. que tiene calculo lambda
+
+66. defina inteligencia artificial
+67. explique machine learning
+68. describe base de datos
+69. relacionados inteligencia artificial y machine learning
+70. para que sirve inteligencia artificial
+
+## Base de Conocimiento UFC (70)
 
 1. que es ufc
 2. que es mma
@@ -125,3 +152,113 @@ Notas:
 48. ultimos eventos
 49. que paso en ufc 328
 50. record de alex pereira
+
+51. aprender que Dana White es el presidente de la ufc
+52. quien es Dana White
+53. quien es dana white
+
+54. para que sirve octagon
+55. (cuando el bot pregunte) sirve para delimitar el area de combate
+56. para que sirve octagon
+
+57. que tipo es octagon
+58. (cuando el bot pregunte) recinto de combate
+59. que tipo es octagon
+
+60. que tiene octagon
+61. (cuando el bot pregunte) ocho lados
+62. que tiene octagon
+
+63. aprender que tko es sinonimo de nocaut
+64. que es tko
+
+65. quién es el campeón de peso mosca
+66. top 5 de peso pesado
+67. rankeado 1 de peso ligero
+68. record de khamzat chimaev
+69. estilo de alex pereira
+70. que es jiu jitsu brasileno
+
+## Base de Conocimiento Ciencias (70)
+
+1. que es inteligencia artificial
+2. que es machine learning
+3. que es red neuronal
+4. que es base de datos
+5. que es algoritmo
+6. explique recursividad
+7. que es fotosintesis
+8. que es celula
+9. que es adn
+10. que es evolucion
+
+11. para que sirve inteligencia artificial
+12. para que sirve machine learning
+13. para que sirve base de datos
+14. para que sirve algoritmo
+15. para que sirve fotosintesis
+16. para que sirve adn
+17. para que sirve tabla periodica
+
+18. que tipo es machine learning
+19. que tipo es red neuronal
+20. que tipo es fotosintesis
+21. que tipo es gravedad
+22. que tipo es atomo
+23. que tipo es costa rica
+24. que tipo es rio amazonas
+25. que tipo es oceano pacifico
+
+26. que tiene inteligencia artificial
+27. que tiene machine learning
+28. que tiene red neuronal
+29. que tiene adn
+30. que tiene atomo
+31. que tiene costa rica
+32. que tiene ecosistema
+33. que tiene tabla periodica
+
+34. relacionados machine learning y inteligencia artificial
+35. relacionados red neuronal y machine learning
+36. relacionados adn y celula
+37. relacionados atomo y tabla periodica
+38. relacionados costa rica y mesoamerica
+39. relacionados everest y antartida
+40. relacionados fotosintesis y ecosistema
+
+41. que es ia
+42. que es ml
+43. que es bd
+44. que es pl
+45. que es programacion logica
+
+46. aprender que cr significa costa rica
+47. que es cr
+
+48. para que sirve telescopio james webb
+49. (cuando el bot pregunte) sirve para observar el universo
+50. para que sirve telescopio james webb
+
+51. que tipo es telescopio james webb
+52. (cuando el bot pregunte) instrumento astronomico
+53. que tipo es telescopio james webb
+
+54. que tiene telescopio james webb
+55. (cuando el bot pregunte) espejo grande
+56. que tiene telescopio james webb
+
+57. aprender que Albert Einstein es fisico teorico
+58. quien es Albert Einstein
+59. quien es albert einstein
+
+60. que es oceano pacifico
+61. que es rio amazonas
+62. que es monte everest
+63. que es revolucion francesa
+64. que tipo es segunda guerra mundial
+65. que es guerra fria
+66. para que sirve termodinamica
+67. que tiene ecosistema
+68. que tipo es antartida
+69. que es teoria de la evolucion
+70. para que sirve oceano pacifico

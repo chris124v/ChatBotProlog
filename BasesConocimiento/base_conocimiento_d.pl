@@ -1,5 +1,5 @@
 %  Tema: Ciencias, Geografia, Historia y Arte/Cultura
-%  Autor: [Tu nombre]
+%  Autor: Daniel Arce
 %
 %  Declaraciones dinamicas y multifile
 %

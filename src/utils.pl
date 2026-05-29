@@ -33,15 +33,42 @@ contiene_alguna(Str, [_|T]) :-
 extraer_concepto(Entrada, Concepto) :-
     Prefijos = [
         "que es ","explique ","defina ","define ","describe ",
+        "quien es ","quién es ",
         "para que sirve ","para que se usa ","como se usa ",
         "que tipo es ","que clase es ","que categoria es ",
         "propiedades de ","caracteristicas de ",
         "que tiene ","que tienen ",
+        "olvidar ","borrar ","eliminar concepto ",
         "el ","la ","los ","las ","un ","una "
     ],
     quitar_prefijos(Entrada, Prefijos, Resto),
-    primer_token(Resto, TokenLimpio),
-    atom_string(Concepto, TokenLimpio).
+    normalizar_identificador(Resto, Concepto).
+
+
+% Normaliza una frase a un solo identificador:
+% - minusculas
+% - quita puntuacion
+% - reemplaza espacios por '_'
+% - quita articulos iniciales (el/la/los/las/un/una)
+
+normalizar_identificador(Frase, Identificador) :-
+    normalize_space(string(F0), Frase),
+    string_lower(F0, F1),
+    split_string(F1, " \t\n", " \t\n?!.,:;()[]{}\"", Tokens0),
+    exclude(=(""), Tokens0, Tokens1),
+    quitar_articulos_iniciales(Tokens1, Tokens),
+    ( Tokens = [] ->
+        Identificador = ''
+    ;
+        join_tokens_con_guion_bajo(Tokens, OutStr),
+        atom_string(Identificador, OutStr)
+    ).
+
+quitar_articulos_iniciales([H|T], R) :-
+    member(H, ["el","la","los","las","un","una"]),
+    !,
+    quitar_articulos_iniciales(T, R).
+quitar_articulos_iniciales(L, L).
  
  
 % Intenta eliminar cada prefijo de la lista de manera recursiva.
@@ -83,7 +110,7 @@ extraer_aprendizaje(Entrada, Concepto, Definicion) :-
     sub_string(Resto, 0, PosEs, _, NombreStr),
     InicioDefStr is PosEs + LargoEs,
     sub_string(Resto, InicioDefStr, _, 0, DefStr),
-    atom_string(Concepto, NombreStr),
+    normalizar_identificador(NombreStr, Concepto),
     atom_string(Definicion, DefStr).
  
  
@@ -94,17 +121,17 @@ extraer_aprendizaje(Entrada, Concepto, Definicion) :-
 %   "py significa python"
  
 extraer_sinonimo(Entrada, A, B) :-
-    (   sub_string(Entrada, PosConector, LargoConector, _, " es sinonimo de ")
-    ;   sub_string(Entrada, PosConector, LargoConector, _, " significa ")
+    % Soporta variantes como: "aprender que IA significa inteligencia artificial"
+    quitar_prefijos(Entrada, ["aprender que "], Entrada0),
+    (   sub_string(Entrada0, PosConector, LargoConector, _, " es sinonimo de ")
+    ;   sub_string(Entrada0, PosConector, LargoConector, _, " significa ")
     ),
     !,
-    sub_string(Entrada, 0, PosConector, _, StrA),
+    sub_string(Entrada0, 0, PosConector, _, StrA),
     InicioB is PosConector + LargoConector,
-    sub_string(Entrada, InicioB, _, 0, StrB),
-    primer_token(StrA, TokenA),
-    primer_token(StrB, TokenB),
-    atom_string(A, TokenA),
-    atom_string(B, TokenB).
+    sub_string(Entrada0, InicioB, _, 0, StrB),
+    normalizar_identificador(StrA, A),
+    normalizar_identificador(StrB, B).
  
  
 % Extraccion de dos conceptos para verificar relacion
@@ -126,10 +153,8 @@ extraer_dos_conceptos(Entrada, X, Y) :-
     sub_string(Par, 0, PosSep, _, StrX),
     InicioY is PosSep + LargoSep,
     sub_string(Par, InicioY, _, 0, StrY),
-    primer_token(StrX, TokenX),
-    primer_token(StrY, TokenY),
-    atom_string(X, TokenX),
-    atom_string(Y, TokenY).
+    normalizar_identificador(StrX, X),
+    normalizar_identificador(StrY, Y).
 
 
 %  Extenesiones de parseo para UFC

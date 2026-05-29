@@ -1,12 +1,5 @@
-
 %  Tema: Ultimate Fighting Championship - MMA (UFC)
 %  Autor: Christopher Vargas
-%  Responsabilidades:
-%    - Campeones actuales de cada división
-%    - Top 5 ranqueados de cada división
-%    - Estilos de lucha (boxing, kickboxing, judo, bjj, etc)
-%    - Últimos 5 eventos (UFC 324, 325, 326, 327, 328)
-%    - Información general de UFC
  
 %  Declaraciones dinamicas
  
