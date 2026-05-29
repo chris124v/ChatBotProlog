@@ -1,5 +1,4 @@
-% =========================================================
-%  SECCION 2.6 - MOTOR DE INFERENCIAS LOGICAS
+%  seccion 2.6: Motor de Inferencias Lógicas
 %
 %  Este módulo implementa inferencias lógicas simples
 %  para generar conclusiones a partir de los hechos
@@ -12,10 +11,9 @@
 %    - Resolución por sinónimos (normalizar términos)
 %    - Herencia de usos (sirve_para se propaga)
 %    - Detección de relaciones entre conceptos
-% =========================================================
  
  
-% ----- INFERENCIA 1: IS-A TRANSITIVO -----
+% Inferencia 1: IS-A TRANSITIVO 
 %
 % Si X es_un Y, e Y es_un Z (directa o por más pasos),
 % entonces es_tipo(X, Z) es verdadero.
@@ -39,7 +37,7 @@ es_tipo(X, Z) :-
     es_tipo(Y, Z).
  
  
-% ----- INFERENCIA 2: HERENCIA DE PROPIEDADES -----
+% Inferencia 2: Herencia de Propiedades
 %
 % X hereda todas las propiedades de sus categorías
 % ancestros en la jerarquía es_un.
@@ -65,7 +63,7 @@ tiene_inferido(X, P) :-
     tiene(Tipo, P).
  
  
-% ----- INFERENCIA 3: RESOLUCIÓN POR SINÓNIMOS -----
+% Inferencia 3: Resolución por Sinónimos
 %
 % Normaliza términos usando la tabla de sinónimos
 % antes de buscar conceptos. Esto permite que
@@ -89,7 +87,7 @@ concepto_resuelto(X, Def) :-
     concepto(Y, Def).
  
  
-% ----- INFERENCIA 4: HERENCIA DE USOS -----
+% Inferencia 4: Herencia de Usos
 %
 % Si no hay un sirve_para directo para X,
 % busca en su tipo padre en la jerarquía.
@@ -99,8 +97,6 @@ concepto_resuelto(X, Def) :-
 %   es_un(boxeo, estilo_lucha_de_pie).
 %   => si pregunta "para que sirve boxeo" se responde
 %      aunque sea una categoría padre quien define el uso.
-%
-% Aplicación: Evita duplicar información en la BD.
 % Caso base: uso directo del concepto.
 % Caso recursivo: busca en tipos ancestros.
  
@@ -111,7 +107,7 @@ sirve_para_inferido(X, Uso) :-
     sirve_para(Tipo, Uso).
  
  
-% ----- INFERENCIA 5: DETECCIÓN DE RELACIÓN ENTRE CONCEPTOS -----
+% Inferencia 5: Detección de Relaciones entre Conceptos
 %
 % Dos conceptos están relacionados si comparten al menos
 % una categoría común en la jerarquía de es_tipo.

@@ -1,14 +1,5 @@
-% =========================================================
-%  SECCION 2.7 - FLUJO CONVERSACIONAL
-%
-%  Implementa la conversacion completa usando:
-%    - Recursividad (sin ningun ciclo imperativo)
-%    - Backtracking (para detectar intencion y listar respuestas)
-%    - Predicados dinamicos (para aprendizaje en tiempo real)
-%    - Reglas declarativas (cada comportamiento es una regla Prolog)
-% =========================================================
- 
- 
+%  Seccion 2.7 - Flujo Conversacional Completo
+
 % --- Punto de entrada ---
 % El usuario inicia el chatbot ejecutando: ?- inicio.
  
@@ -21,15 +12,12 @@ inicio :-
     conversar.
  
  
-% --- Loop conversacional principal ---
-%
-% Mantiene la conversacion activa mediante recursion pura.
-% No usa ninguna construccion imperativa (while, for, repeat con side-effects).
+% Loop de conversacion inicial
 %
 % Flujo:
-%   1. Muestra prompt y lee entrada del usuario
-%   2. Si el usuario se despide, termina
-%   3. Si no, procesa la entrada y vuelve a llamarse a si mismo
+% 1. Muestra prompt y lee entrada del usuario
+% 2. Si el usuario se despide, termina
+% 3. Si no, procesa la entrada y vuelve a llamarse a si mismo
  
 conversar :-
     write('Tu: '),
@@ -39,12 +27,11 @@ conversar :-
     ;
         procesar(Entrada),
         nl,
-        conversar        % Llamada recursiva: reemplaza el ciclo imperativo
+        conversar        % Llamada recursiva para seguir conversando
     ).
  
  
-% --- Procesador de entrada ---
-%
+% Procesador de entrada
 % Detecta la intencion del usuario (que quiere hacer) y la delega
 % al manejador correspondiente. El corte (!) asegura que solo se
 % use la primera intencion detectada.
@@ -55,7 +42,7 @@ procesar(Entrada) :-
     manejar(Intencion, Dato).
  
  
-% --- Deteccion de intencion por palabras clave ---
+% Deteccion de intenciones
 %
 % Cada clausula identifica una intencion diferente buscando
 % frases clave en la entrada del usuario con sub_string.
@@ -142,7 +129,7 @@ detectar_intencion(E, nuevo_sinonimo, info(A, B)) :-
     contiene_alguna(E, ["es sinonimo de","significa "]),
     extraer_sinonimo(E, A, B).
  
-% Olvidar un concepto: "olvidar X" — usa retract para eliminar de la BD dinamica
+% Olvidar un concepto: "olvidar X" 
 detectar_intencion(E, olvidar, C) :-
     contiene_alguna(E, ["olvidar ","eliminar concepto ","borrar "]),
     extraer_concepto(E, C).
@@ -155,7 +142,7 @@ detectar_intencion(E, ayuda, _) :-
 detectar_intencion(_, desconocido, _).
  
  
-% --- Manejadores de respuesta ---
+% Manejadores de respuesta
 %
 % Cada clausula manejar/2 produce la respuesta apropiada
 % para una intencion detectada.
@@ -317,7 +304,7 @@ manejar(desconocido, _) :-
     write("Bot: No entendi eso. Escribe 'ayuda' para ver los comandos disponibles.\n").
  
  
-% --- Aprendizaje dinamico interactivo ---
+% Aprendizaje dinamico interactivo 
 %
 % Cuando el chatbot no conoce un concepto, le pregunta al usuario.
 % La respuesta se guarda con assertz para usarla en consultas futuras.
@@ -336,7 +323,7 @@ aprender_nuevo_concepto(C) :-
     ).
  
  
-% --- Deteccion de despedida ---
+% Deteccion de despedida
 %
 % Lista de expresiones que indican que el usuario quiere terminar.
  
@@ -344,7 +331,7 @@ es_despedida(E) :-
     contiene_alguna(E, ["salir","adios","exit","bye","chao","hasta luego","finalizar"]).
  
  
-% --- Salida formateada ---
+% Salida formateada
  
 % Escribe una lista de elementos separados por coma.
 % Caso base: un solo elemento, termina con salto de linea.
@@ -391,9 +378,7 @@ mostrar_ayuda :-
     write("  salir\n").
 
 
-% ---------------------------------------------------------
-%  Helpers de impresion / agregacion (UFC)
-% ---------------------------------------------------------
+%  Helpers de impresion 
 
 top_ranking(Division, N, Lista) :-
     findall(Pos-Nombre, rankeado(Division, Pos, Nombre), Pairs),

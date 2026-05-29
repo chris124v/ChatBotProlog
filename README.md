@@ -77,7 +77,7 @@ Presiona `` Ctrl + ` `` para abrir la terminal de VS Code.
 **En Windows**, si `swipl` no se reconoce como comando, usa la ruta completa:
 
 ```powershell
-& "C:\Program Files\swipl\bin\swipl.exe" chatbot.pl
+& "C:\Program Files\swipl\bin\swipl.exe" swipl --no-tty -q -s main.pl -g inicio
 ```
 
 > **Nota:** Esto ocurre cuando el instalador de SWI-Prolog no agregó la ruta al PATH del sistema.
@@ -87,16 +87,16 @@ Presiona `` Ctrl + ` `` para abrir la terminal de VS Code.
 **En Linux/macOS:**
 
 ```bash
-swipl chatbot.pl
+swipl --no-tty -q -s main.pl -g inicio
 ```
 
 ### Paso 4 — Iniciar el chatbot
 
-Una vez dentro del intérprete de Prolog (`?-`), escribe:
-
-```prolog
-inicio.
+```prolog.
+swipl --no-tty -q -s main.pl -g inicio
 ```
+
+Ya dentro del interprete se puede preguntar todo naturalmente.
 
 > Importante: en Prolog todo comando termina con un punto `.`
 
@@ -106,7 +106,7 @@ El chatbot se ejecuta directamente sin necesidad de compilación previa. SWI-Pro
  
 ## Uso del Chatbot
  
-Una vez iniciado con `inicio.`, el chatbot presenta un menú interactivo donde puedes:
+El chatbot presenta un menú interactivo donde puedes:
  
 - **Hacer preguntas** sobre la base de conocimiento
 - **Aprender nueva información** (el chatbot la almacena dinámicamente)
@@ -118,21 +118,6 @@ Una vez iniciado con `inicio.`, el chatbot presenta un menú interactivo donde p
 
 ### Ejemplo de Interacción
  
-```
-?- inicio.
-========================================
-   BIENVENIDO AL CHATBOT INTELIGENTE
-========================================
- 
-¿Qué deseas hacer?
-1. Hacer una pregunta
-2. Aprender nueva información
-3. Consultar un concepto
-4. Salir
- 
-Opción: 1.
-```
-Importante siempre poner un "." despues de poner el comando.
 
 ---
  

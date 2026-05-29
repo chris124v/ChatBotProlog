@@ -1,12 +1,10 @@
-% =========================================================
-%  UTILIDADES DE PROCESAMIENTO DE TEXTO
+%  Utilidades para procesamiento de texto
 %
 %  Predicados auxiliares para leer, normalizar y analizar
 %  el texto que ingresa el usuario.
-% =========================================================
  
  
-% --- Lectura y normalizacion de entrada ---
+% Lectura y normalizacion de entrada 
 %
 % Lee la linea completa del usuario y la convierte a minusculas
 % para que las comparaciones no sean sensibles a mayusculas.
@@ -16,7 +14,7 @@ leer_entrada(EntradaNorm) :-
     string_lower(Linea, EntradaNorm).
  
  
-% --- Deteccion de palabras clave ---
+% Deteccion de palabras clave
 %
 % Verifica si al menos una de las frases en la lista aparece en el texto.
 % El corte evita seguir buscando cuando ya encontro una coincidencia.
@@ -27,11 +25,10 @@ contiene_alguna(Str, [_|T]) :-
     contiene_alguna(Str, T).
  
  
-% --- Extraccion del concepto de una pregunta ---
+% Extraccion del concepto de una pregunta 
 %
 % Quita prefijos funcionales (verbos de pregunta, articulos) del inicio
 % del texto y retorna el primer token significativo como atomo.
-% Ejemplo: "explique la recursion" => recursion
  
 extraer_concepto(Entrada, Concepto) :-
     Prefijos = [
@@ -70,7 +67,7 @@ primer_token(Str, Token) :-
 primer_token(Str, Str).
  
  
-% --- Extraccion de par concepto+definicion para aprendizaje ---
+% Extraccion de par concepto+definicion para aprendizaje
 %
 % Parsea el patron: "aprender que NOMBRE es DEFINICION"
 % Ejemplo: "aprender que rust es un lenguaje de sistemas"
@@ -90,7 +87,7 @@ extraer_aprendizaje(Entrada, Concepto, Definicion) :-
     atom_string(Definicion, DefStr).
  
  
-% --- Extraccion de par de sinonimos ---
+% Extraccion de par de sinonimos
 %
 % Parsea patrones como:
 %   "js es sinonimo de javascript"
@@ -110,7 +107,7 @@ extraer_sinonimo(Entrada, A, B) :-
     atom_string(B, TokenB).
  
  
-% --- Extraccion de dos conceptos para verificar relacion ---
+% Extraccion de dos conceptos para verificar relacion
 %
 % Parsea patrones como: "relacionados prolog y haskell"
 % Busca la conjuncion " y " o " e " para separar los dos conceptos.
@@ -135,23 +132,21 @@ extraer_dos_conceptos(Entrada, X, Y) :-
     atom_string(Y, TokenY).
 
 
-% =========================================================
-%  EXTENSIONES DE PARSEO (UFC)
+%  Extenesiones de parseo para UFC
 %
 %  Estas utilidades permiten entender frases mas naturales
 %  para consultar hechos como campeon/2, rankeado/3,
 %  evento_ufc/4, pelea/5, record_luchador/3, estilo_lucha/2.
-% =========================================================
 
 
-% --- Tokenizacion simple (quita puntuacion comun) ---
+% Tokenizacion simple (quita puntuacion comun)
 
 tokenizar(Str, Tokens) :-
     split_string(Str, " \t\n", " \t\n?!.,:;()[]{}\"", Raw),
     exclude(=(""), Raw, Tokens).
 
 
-% --- Extraer substring despues de un prefijo (primer match) ---
+% Extraer substring despues de un prefijo (primer match)
 
 extraer_despues_de_prefijos(Entrada, [P|_], Resto) :-
     sub_string(Entrada, Antes, Largo, _, P),
@@ -163,7 +158,7 @@ extraer_despues_de_prefijos(Entrada, [_|T], Resto) :-
     extraer_despues_de_prefijos(Entrada, T, Resto).
 
 
-% --- Join de tokens con '_' para mapear "peso pesado" -> peso_pesado ---
+% Join de tokens con '_' para mapear "peso pesado" -> peso_pesado 
 
 join_tokens_con_guion_bajo([H], H) :- !.
 join_tokens_con_guion_bajo([H|T], Out) :-
@@ -172,7 +167,7 @@ join_tokens_con_guion_bajo([H|T], Out) :-
     string_concat(Tmp, Tail, Out).
 
 
-% --- Resolver division desde una frase ---
+% Resolver division desde una frase
 % Acepta "peso_pesado" o "peso pesado".
 
 resolver_division_desde_frase(Frase, Division) :-
@@ -194,7 +189,7 @@ extraer_division(Entrada, Division) :-
     ).
 
 
-% --- Top N y division ---
+% Top N y division
 
 extraer_top_y_division(Entrada, N, Division) :-
     tokenizar(Entrada, Tokens),
@@ -219,8 +214,7 @@ rest_a_division(RestTokens, Division) :-
     Division = DivAtom.
 
 
-% --- Posicion de ranking y division ---
-
+% Posicion de ranking y division
 extraer_posicion_y_division(Entrada, Pos, Division) :-
     tokenizar(Entrada, Tokens),
     ( append(_, ["rankeado", TokenPos|Rest], Tokens)
@@ -230,7 +224,7 @@ extraer_posicion_y_division(Entrada, Pos, Division) :-
     rest_a_division(Rest, Division).
 
 
-% --- Numero de evento UFC (ej: "ufc 328") ---
+% Numero de evento UFC (ej: "ufc 328") 
 
 extraer_numero_evento(Entrada, Num) :-
     tokenizar(Entrada, Tokens),
@@ -239,13 +233,13 @@ extraer_numero_evento(Entrada, Num) :-
     !.
 
 
-% --- Extraer nombre de luchador a partir de un prefijo ---
+% Extraer nombre de luchador a partir de un prefijo 
 
 extraer_nombre_luchador(Entrada, Prefijos, Nombre) :-
     extraer_despues_de_prefijos(Entrada, Prefijos, Nombre).
 
 
-% --- Resolver luchador por nombre (case-insensitive) ---
+% Resolver luchador por nombre (case-insensitive)
 % 1) Match exacto ignorando mayusculas
 % 2) Si no hay exacto, permite substring SOLO si es unico
 
