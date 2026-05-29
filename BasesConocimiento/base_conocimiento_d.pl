@@ -1,11 +1,4 @@
 %  Tema: Ciencias, Geografia, Historia y Arte/Cultura
-%  Autor: Daniel Arce
-%
-%  Declaraciones dinamicas y multifile
-%
-%  Estas declaraciones le dicen a Prolog que los predicados
-%  pueden cambiar durante la ejecucion (usando assertz/retract).
-%  Sin esto, Prolog no permitiria agregar hechos en tiempo real.
 
 :- dynamic concepto/2.
 :- multifile concepto/2.

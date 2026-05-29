@@ -14,6 +14,7 @@
 :- [conversation].   % Flujo conversacional (Sección 2.7)
 :- [utils].          % Utilidades de procesamiento de texto
 :- [sinonimos].      % Aprendizaje de sinonimos    (Seccion 2.4)
+:- [variaciones].    % Interpretacion de variaciones (Seccion 2.5)
  
 % Cargar bases de conocimiento de cada miembro del grupo
 :- prolog_load_context(directory, SrcDir),

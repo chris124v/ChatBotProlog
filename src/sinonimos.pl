@@ -1,9 +1,5 @@
 % =========================================================
-%  SECCION 2.4 - APRENDIZAJE DE SINONIMOS
-%  Autor: Daniel Arce
-%
-%  Este modulo gestiona el aprendizaje y consulta de
-%  sinonimos de forma dinamica durante la ejecucion.
+%  Aprendizaje de Sinonimos
 %
 %  Predicados exportados (usados desde conversation.pl):
 %    son_sinonimos/2       - verifica si dos terminos son sinonimos
@@ -13,18 +9,7 @@
 % =========================================================
 
 
-% =========================================================
-%  1. VERIFICAR SI DOS TERMINOS SON SINONIMOS
-%
-%  Comprueba la relacion en tres casos:
-%    a) sinonimo(A, B) declarado directamente
-%    b) sinonimo(B, A) declarado en orden inverso
-%    c) A y B apuntan al mismo termino canonico
-%
-%  Ejemplos:
-%    son_sinonimos(ia, inteligencia_artificial) => true
-%    son_sinonimos(sgm, wwii)                  => true (ambos apuntan a segunda_guerra_mundial)
-% =========================================================
+%  1. Verificar si dos terminos son sinonimos
 
 son_sinonimos(A, B) :-
     sinonimo(A, B).
@@ -35,19 +20,7 @@ son_sinonimos(A, B) :-
     sinonimo(A, C),
     sinonimo(B, C).
 
-
-% =========================================================
-%  2. LISTAR SINONIMOS CONOCIDOS DE UN TERMINO
-%
-%  Busca en ambas direcciones del predicado sinonimo/2.
-%
-%  Ejemplo:
-%    sinonimos_de(adn, Lista)
-%    => Lista = [acido_desoxirribonucleico, genetica_molecular]
-%
-%    sinonimos_de(segunda_guerra_mundial, Lista)
-%    => Lista = [sgm, wwii]
-% =========================================================
+%  2. Listar sinonimos de un termino
 
 sinonimos_de(Termino, Lista) :-
     findall(S, sinonimo(S, Termino), L1),
@@ -55,17 +28,7 @@ sinonimos_de(Termino, Lista) :-
     append(L1, L2, Todos),
     sort(Todos, Lista).
 
-
-% =========================================================
-%  3. APRENDER UN SINONIMO NUEVO CON VALIDACION
-%
-%  Valida antes de guardar:
-%    a) Los dos terminos no son identicos
-%    b) El sinonimo no existe ya en ninguna direccion
-%    c) Al menos uno de los terminos existe en la base
-%
-%  Si pasa, guarda con assertz para disponibilidad inmediata.
-% =========================================================
+%  3. Aprender un sinonimo nuevo con validacion
 
 aprender_sinonimo(A, B) :-
     ( A == B ->
@@ -79,12 +42,7 @@ aprender_sinonimo(A, B) :-
         format("Bot: Anotado! Ahora se que '~w' es sinonimo de '~w'.~n", [A, B])
     ).
 
-
-% =========================================================
-%  4. ELIMINAR UN SINONIMO EXISTENTE
-%
-%  Intenta retract en ambas direcciones.
-% =========================================================
+%  4. Eliminar un sinonimo existente
 
 olvidar_sinonimo(A, B) :-
     ( retract(sinonimo(A, B)) ->
@@ -95,10 +53,7 @@ olvidar_sinonimo(A, B) :-
         format("Bot: No tenia registrado que '~w' y '~w' fueran sinonimos.~n", [A, B])
     ).
 
-
-% =========================================================
-%  AUXILIAR: VERIFICAR SI UN TERMINO ES CONOCIDO
-% =========================================================
+%  Predicado auxiliar para validar que un termino es conocido
 
 termino_conocido(T) :- concepto(T, _).
 termino_conocido(T) :- sinonimo(T, _).

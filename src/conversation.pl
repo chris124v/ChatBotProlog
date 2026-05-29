@@ -24,10 +24,25 @@ conversar :-
 
 
 % Procesador de entrada
+%
+% Primero intenta con detectar_intencion (patrones exactos).
+% Si la intencion resulta "desconocido", intenta con
+% interpreta_variacion (patrones flexibles de variaciones.pl).
+% Solo si ambos fallan, responde con el mensaje de fallback.
+
 procesar(Entrada) :-
     detectar_intencion(Entrada, Intencion, Dato),
+    Intencion \= desconocido,
     !,
     manejar(Intencion, Dato).
+
+procesar(Entrada) :-
+    interpreta_variacion(Entrada, Intencion, Dato),
+    !,
+    manejar(Intencion, Dato).
+
+procesar(_) :-
+    manejar(desconocido, _).
 
 
 % =========================================================
@@ -114,9 +129,13 @@ detectar_intencion(E, aprender, info(C, D)) :-
     extraer_aprendizaje(E, C, D).
 
 % Aprendizaje de sinonimo: "X es sinonimo de Y" o "X significa Y"
+% Nota: se excluyen frases de pregunta como "que significa X"
+% para que sean manejadas por interpreta_variacion como definicion.
 detectar_intencion(E, nuevo_sinonimo, info(A, B)) :-
     contiene_alguna(E, ["es sinonimo de","significa "]),
-    extraer_sinonimo(E, A, B).
+    extraer_sinonimo(E, A, B),
+    % Validar que A no sea una palabra de pregunta
+    \+ member(A, [que, cual, como, quien, donde, cuando, cuales]).
 
 % Olvidar sinonimo: "olvidar sinonimo X de Y"   <-- SECCION 2.4
 detectar_intencion(E, olvidar_sinonimo, info(A, B)) :-
