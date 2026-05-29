@@ -3,7 +3,7 @@
 %  Este archivo es el punto de entrada del chatbot.
 %  Carga todos los módulos y bases de conocimiento.
 %
-%  Para iniciar: swipl main.pl  luego  ?- inicio.
+%  Para iniciar: swipl src/main.pl y luego ?- inicio.
 % =========================================================
  
 % Cargar módulos de utilidades
@@ -13,6 +13,7 @@
 :- [inference].      % Motor de inferencias (Sección 2.6)
 :- [conversation].   % Flujo conversacional (Sección 2.7)
 :- [utils].          % Utilidades de procesamiento de texto
+:- [sinonimos].      % Aprendizaje de sinonimos    (Seccion 2.4)
  
 % Cargar bases de conocimiento de cada miembro del grupo
 :- prolog_load_context(directory, SrcDir),
