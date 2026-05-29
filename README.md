@@ -133,3 +133,6 @@ ChatBotProlog/
 ```
  
 ---
+
+## Manual de Usuario
+https://docs.google.com/document/d/11Yi4OkmKMyBl8SDd7LAa2cJ5KuY_m3wxhZjJFJalTEQ/edit?usp=sharing
