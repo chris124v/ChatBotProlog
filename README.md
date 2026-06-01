@@ -10,7 +10,8 @@ El Chatbot Inteligente es una aplicación de consola desarrollada en Prolog que 
 - Andrey Jesús Jiménez Núñez,  2024145153
 - Isaac Villalobos Bonilla, 2024124285
 - Daniel Arce Campos, 2024174489
-**IC 4700: Lenguajes de Programación**  
+
+IC 4700: Lenguajes de Programación
 Prof. Bryan Tomás Hernández Sibaja
  
 ---
