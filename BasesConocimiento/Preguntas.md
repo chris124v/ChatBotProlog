@@ -7,6 +7,218 @@ Notas:
 - Para conceptos de varias palabras se recomienda usar guion bajo, por ejemplo: `inteligencia_artificial`, `programacion_logica`, `jiu_jitsu_brasileno`.
 - Tambien puedes escribir conceptos con espacios; el bot los normaliza a un identificador (ej: "inteligencia artificial" -> `inteligencia_artificial`).
 
+---
+
+## Casos de prueba por especificacion 
+
+Importante sobre aprendizaje dinamico:
+- Estas pruebas dependen de la sesion actual de SWI-Prolog.
+- Para repetirlas “desde cero”, reinicia la sesion del interprete.
+- Para deshacer algunas pruebas puedes usar `olvidar X` y/o `olvidar sinonimo A de B`.
+
+### 2.1 Base de Conocimiento Inicial (hechos, reglas, conceptos, relaciones, sinonimos)
+
+**Base A — Computacion**
+1. que es prolog
+2. para que sirve haskell
+3. que tipo es prolog
+4. que tiene prolog
+5. relacionados prolog y haskell
+6. que es js
+
+**Base B — Internet Slang y Memes**
+1. que es sigma
+2. que tipo es sigma
+3. que tiene sigma
+4. que es mental decay
+5. sinonimos de brainrot
+6. relacionados chad y beta male
+
+**Base C — UFC**
+1. que es ufc
+2. para que sirve judo
+3. que tipo es boxeo
+4. que tiene jiu jitsu brasileno
+5. relacionados boxeo y kickboxing
+6. quien es el campeon de peso pesado
+
+**Base D — Ciencias/Geografia/Historia/Arte**
+1. que es fotosintesis
+2. para que sirve tabla periodica
+3. que tipo es red neuronal
+4. que tiene adn
+5. que es cr
+6. relacionados adn y celula
+
+
+### 2.2 Conversacion con el Usuario (consola, consultas, ayuda, fallback)
+
+Pruebas generales del flujo (mezclando bases, porque el chatbot carga todas a la vez):
+
+1. ayuda
+2. que es prolog
+3. que es sigma
+4. quien es el campeon de peso mosca
+5. que es rio amazonas
+6. hola
+7. salir
+
+Notas esperadas:
+- En (6) deberias ver el mensaje de fallback: "No entendi eso...".
+- Entre preguntas, el bot debe seguir pidiendo "Tu:" hasta que escribas (7).
+
+
+### 2.3 Aprendizaje Dinamico (cuando no sabe, pide y guarda; luego reutiliza)
+
+Aqui se prueban 2 formas de aprender:
+- **Interactivo**: pregunta algo desconocido y el bot te pide la respuesta.
+- **Directo**: usa el comando `aprender que X es Y`.
+
+**Base A — Computacion (aprendizaje interactivo de uso/tipo/propiedad)**
+1. para que sirve calculo lambda
+2. (cuando el bot pregunte) sirve para describir funciones y computacion
+3. para que sirve calculo lambda
+4. que tipo es calculo lambda
+5. (cuando el bot pregunte) modelo matematico
+6. que tipo es calculo lambda
+7. que tiene calculo lambda
+8. (cuando el bot pregunte) abstraccion
+9. que tiene calculo lambda
+
+**Base B — Slang/Memes (aprendizaje interactivo de definicion)**
+1. que es skibidi
+2. (cuando el bot pregunte) meme viral de internet
+3. que es skibidi
+4. que tipo es skibidi
+5. (cuando el bot pregunte) meme
+6. que tipo es skibidi
+7. que tiene skibidi
+8. (cuando el bot pregunte) ritmo_pegajoso
+9. que tiene skibidi
+
+**Base C — UFC (aprendizaje interactivo completo con un termino nuevo)**
+1. que es octagon
+2. (cuando el bot pregunte) jaula donde pelean los luchadores en ufc
+3. para que sirve octagon
+4. (cuando el bot pregunte) sirve para delimitar el area de combate
+5. que tipo es octagon
+6. (cuando el bot pregunte) recinto de combate
+7. que tiene octagon
+8. (cuando el bot pregunte) ocho lados
+9. que es octagon
+
+**Base D — Ciencias (aprendizaje interactivo completo con un termino nuevo)**
+1. para que sirve telescopio james webb
+2. (cuando el bot pregunte) sirve para observar el universo
+3. que tipo es telescopio james webb
+4. (cuando el bot pregunte) instrumento astronomico
+5. que tiene telescopio james webb
+6. (cuando el bot pregunte) espejo grande
+7. para que sirve telescopio james webb
+
+**Prueba de aprendizaje directo (assertz de concepto/2)**
+1. aprender que type_inference es tecnica para deducir tipos automaticamente
+2. que es type inference
+
+
+### 2.4 Aprendizaje de Sinonimos (ensenar, listar, verificar y usar)
+
+- Nota: en este chatbot, los sinonimos se usan especialmente para mejorar preguntas de **definicion** ("que es X").
+
+**Base A — Computacion**
+1. aprender que jit es sinonimo de compilador
+2. que es jit
+3. sinonimos de javascript
+4. son sinonimos js y javascript
+5. olvidar sinonimo js de javascript
+
+**Base B — Slang/Memes**
+1. son sinonimos doom_scrolling y doomscroll
+2. que es doomscroll
+3. sinonimos de brainrot
+4. son sinonimos no cap y de verdad
+
+**Base C — UFC**
+1. aprender que jiujitsu es sinonimo de jiu jitsu brasileno
+2. que es jiujitsu
+3. son sinonimos ko y nocaut
+4. olvidar sinonimo jiujitsu de jiu_jitsu_brasileno
+
+**Base D — Ciencias/Historia/Geografia**
+1. sinonimos de adn
+2. son sinonimos acido desoxirribonucleico y adn
+3. aprender que ww2 significa segunda guerra mundial
+4. que es ww2
+
+
+### 2.5 Variaciones de Preguntas (misma idea, distinta redaccion)
+
+**Base A — Computacion (misma definicion con distintas frases)**
+1. que es prolog?
+2. cual es la definicion de prolog
+3. hablame de prolog
+4. que significa prolog
+
+**Base B — Slang/Memes (espacios, signos y sinonimos)**
+1. que es doom scrolling
+2. explicame doom_scrolling
+3. que es de verdad
+
+**Base C — UFC (acentos y signos, y variaciones de consulta)**
+1. qué pasó en ufc 328?
+2. peleas de ufc 328
+3. cartelera ufc 328
+
+**Base D — Ciencias/Geografia**
+1. que entiendes por rio amazonas
+2. informacion sobre monte everest
+3. hablame de teoria de la evolucion
+
+
+### 2.6 Inferencias Logicas (transitividad, herencia, relaciones)
+
+**Base A — Computacion**
+1. que tipo es prolog
+2. que tiene lenguaje logico
+3. que tiene prolog
+4. relacionados python y scala
+
+**Base B — Slang/Memes**
+1. relacionados zoomer y boomer
+2. relacionados chad y beta male
+
+**Base C — UFC**
+1. que tipo es jiu jitsu brasileno
+2. relacionados judo y wrestling
+
+**Base D — Ciencias**
+1. que tipo es red neuronal
+2. relacionados red neuronal y machine learning
+
+**Inferencia "tipo + propiedad" creada en vivo (estilo ejemplo perro/animal)**
+1. que tiene animal
+2. (cuando el bot pregunte) vida
+3. que tipo es perro
+4. (cuando el bot pregunte) animal
+5. que tiene perro
+
+
+### 2.7 Flujo Conversacional (sesion activa, multiples consultas, terminar solo con salir)
+
+Guion de prueba rapido:
+
+1. ayuda
+2. que es prolog
+3. que es sigma
+4. que es ufc
+5. que es jazz
+6. relacionados boxeo y kickboxing
+7. salir
+
+---
+
+## Apendice: banco de preguntas por tema (para probar cobertura completa)
+
 ## Base de Conocimiento Computacion (70)
 
 1. que es prolog
