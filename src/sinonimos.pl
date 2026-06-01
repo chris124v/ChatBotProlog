@@ -1,4 +1,3 @@
-% =========================================================
 %  Aprendizaje de Sinonimos
 %
 %  Predicados exportados (usados desde conversation.pl):
@@ -6,7 +5,6 @@
 %    sinonimos_de/2        - lista todos los sinonimos de un termino
 %    aprender_sinonimo/2   - guarda un sinonimo nuevo con validacion
 %    olvidar_sinonimo/2    - elimina un sinonimo existente
-% =========================================================
 
 
 %  1. Verificar si dos terminos son sinonimos

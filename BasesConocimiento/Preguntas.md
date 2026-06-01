@@ -179,6 +179,89 @@ Notas:
 69. estilo de alex pereira
 70. que es jiu jitsu brasileno
 
+## Base de Conocimiento Internet Slang y Memes (70)
+
+1. que es sigma
+2. que es chad
+3. que es stacey
+4. que es simp
+5. que es incel
+6. que es npc
+7. que es normie
+8. que es beta male
+9. que es zoomer
+10. que es boomer
+
+11. que es looksmaxxing
+12. que es mewing
+13. que es glow up
+14. que es aura
+15. que es mogging
+
+16. que es brainrot
+17. que es no cap
+18. que es cope
+19. que es seethe
+20. que es salty
+21. que es based
+22. que es cringe
+23. que es ratio
+24. que es sus
+25. que es toxic
+
+26. que es doom scrolling
+27. que es ghosting
+28. que es stan
+29. que es gatekeeping
+30. que es cancel culture
+31. que es touch grass
+32. que es redpill
+33. que es bluepill
+34. que es copium
+
+35. que es mid
+36. que es goated
+37. que es top tier
+38. que es low tier
+
+39. que es doge
+40. que es wojak
+41. que es pepe
+42. que es troll face
+43. que es doomposting
+
+44. que es doxx
+45. que es clout
+
+46. que tipo es sigma
+47. que tipo es chad
+48. que tipo es stacey
+49. que tipo es zoomer
+50. que tipo es brainrot
+51. que tipo es doom scrolling
+52. que tipo es ghosting
+
+53. que tiene sigma
+54. que tiene chad
+55. que tiene brainrot
+56. que tiene based
+57. que tiene aura
+58. que tiene toxic
+
+59. sinonimos de sigma
+60. sinonimos de brainrot
+61. son sinonimos doom_scrolling y doomscroll
+62. que es mental decay
+63. que es de verdad
+
+64. relacionados chad y beta male
+65. relacionados zoomer y boomer
+66. relacionados seethe y salty
+67. relacionados mid y goated
+68. relacionados doom scrolling y ghosting
+69. relacionados brainrot y cope
+70. relacionados simp y toxic
+
 ## Base de Conocimiento Ciencias (70)
 
 1. que es inteligencia artificial

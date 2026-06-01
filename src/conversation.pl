@@ -1,6 +1,6 @@
-%  Seccion 2.7 - Flujo Conversacional Completo
+%  Archivo del Flujo Conversacional Completo
 
-% --- Punto de entrada ---
+% Punto de entrada
 inicio :-
     write('=================================================\n'),
     write('   ChatBot Prolog - Razonamiento Logico\n'),
@@ -45,9 +45,7 @@ procesar(_) :-
     manejar(desconocido, _).
 
 
-% =========================================================
-%  DETECCION DE INTENCIONES
-% =========================================================
+%  Deteccion de intenciones basada en patrones de texto
 
 % Preguntas de definicion
 detectar_intencion(E, definir, C) :-
@@ -129,7 +127,7 @@ detectar_intencion(E, aprender, info(C, D)) :-
     extraer_aprendizaje(E, C, D).
 
 % Aprendizaje de sinonimo: "X es sinonimo de Y" o "X significa Y"
-% Nota: se excluyen frases de pregunta como "que significa X"
+% Excluimos frases de pregunta como "que significa X"
 % para que sean manejadas por interpreta_variacion como definicion.
 detectar_intencion(E, nuevo_sinonimo, info(A, B)) :-
     contiene_alguna(E, ["es sinonimo de","significa "]),
@@ -137,18 +135,18 @@ detectar_intencion(E, nuevo_sinonimo, info(A, B)) :-
     % Validar que A no sea una palabra de pregunta
     \+ member(A, [que, cual, como, quien, donde, cuando, cuales]).
 
-% Olvidar sinonimo: "olvidar sinonimo X de Y"   <-- SECCION 2.4
+% Olvidar sinonimo: "olvidar sinonimo X de Y"  
 detectar_intencion(E, olvidar_sinonimo, info(A, B)) :-
     contiene_alguna(E, ["olvidar sinonimo ","eliminar sinonimo ","borrar sinonimo "]),
     extraer_par_sinonimos(E, A, B).
 
-% Listar sinonimos: "sinonimos de X"             <-- SECCION 2.4
+% Listar sinonimos: "sinonimos de X"          
 detectar_intencion(E, listar_sinonimos, C) :-
     contiene_alguna(E, ["sinonimos de ","que sinonimos tiene ","sinonimos tiene "]),
     extraer_despues_de_prefijos(E, ["sinonimos de ","que sinonimos tiene ","sinonimos tiene "], Resto),
     normalizar_identificador(Resto, C).
 
-% Verificar si son sinonimos: "son sinonimos X y Y"   <-- SECCION 2.4
+% Verificar si son sinonimos: "son sinonimos X y Y"  
 detectar_intencion(E, verificar_sinonimo, info(A, B)) :-
     contiene_alguna(E, ["son sinonimos "]),
     extraer_despues_de_prefijos(E, ["son sinonimos "], Par),
@@ -166,10 +164,7 @@ detectar_intencion(E, ayuda, _) :-
 % Fallback
 detectar_intencion(_, desconocido, _).
 
-
-% =========================================================
-%  MANEJADORES DE RESPUESTA
-% =========================================================
+%  Manejadores de respuesta
 
 % Definir concepto
 manejar(definir, C) :-
@@ -308,7 +303,7 @@ manejar(aprender, info(C, D)) :-
 manejar(nuevo_sinonimo, info(A, B)) :-
     aprender_sinonimo(A, B).
 
-% Listar sinonimos                                <-- SECCION 2.4
+% Listar sinonimos                               
 manejar(listar_sinonimos, C) :-
     sinonimos_de(C, Lista),
     ( Lista \= [] ->
@@ -318,7 +313,7 @@ manejar(listar_sinonimos, C) :-
         format("Bot: No conozco sinonimos para '~w'.~n", [C])
     ).
 
-% Verificar sinonimos                             <-- SECCION 2.4
+% Verificar sinonimos                            
 manejar(verificar_sinonimo, info(A, B)) :-
     ( son_sinonimos(A, B) ->
         format("Bot: Si, '~w' y '~w' son sinonimos.~n", [A, B])
@@ -326,7 +321,7 @@ manejar(verificar_sinonimo, info(A, B)) :-
         format("Bot: No, '~w' y '~w' no son sinonimos segun mi conocimiento.~n", [A, B])
     ).
 
-% Olvidar sinonimo                                <-- SECCION 2.4
+% Olvidar sinonimo                                
 manejar(olvidar_sinonimo, info(A, B)) :-
     olvidar_sinonimo(A, B).
 
@@ -346,11 +341,9 @@ manejar(ayuda, _) :-
 manejar(desconocido, _) :-
     write("Bot: No entendi eso. Escribe 'ayuda' para ver los comandos disponibles.\n").
 
+%  Aprendizaje dinamico interactivo
 
-% =========================================================
-%  APRENDIZAJE DINAMICO INTERACTIVO
-% =========================================================
-
+% Estos manejadores se activan cuando el usuario pregunta por algo desconocido.
 aprender_nuevo_concepto(C) :-
     format("Bot: No conozco '~w'. Que es? (escribe la definicion o Enter para omitir)~n", [C]),
     write('Tu: '),
@@ -363,6 +356,7 @@ aprender_nuevo_concepto(C) :-
         write("Bot: Sin problema. Puedes ensenarme despues con: aprender que X es Y\n")
     ).
 
+% Aprender nuevo uso
 aprender_nuevo_uso(C) :-
     format("Bot: No tengo informacion sobre el uso de '~w'. Para que sirve? (o Enter para omitir)~n", [C]),
     write('Tu: '),
@@ -377,6 +371,7 @@ aprender_nuevo_uso(C) :-
         write("Bot: Sin problema.\n")
     ).
 
+% Aprender nuevo tipo
 aprender_nuevo_tipo(C) :-
     format("Bot: No se en que categoria esta '~w'. Que tipo es? (o Enter para omitir)~n", [C]),
     write('Tu: '),
@@ -389,6 +384,7 @@ aprender_nuevo_tipo(C) :-
         write("Bot: Sin problema.\n")
     ).
 
+% Aprender nueva propiedad
 aprender_nueva_propiedad(C) :-
     format("Bot: No conozco propiedades de '~w'. Dime una: (o Enter para omitir)~n", [C]),
     write('Tu: '),
@@ -402,16 +398,17 @@ aprender_nueva_propiedad(C) :-
     ).
 
 
-% =========================================================
-%  DESPEDIDA Y AYUDA
-% =========================================================
+%  Despedida y ayuda
 
+% Deteccion de despedida
 es_despedida(E) :-
     contiene_alguna(E, ["salir","adios","exit","bye","chao","hasta luego","finalizar"]).
 
+% Respuesta de despedida
 despedirse :-
     write("Bot: Hasta luego! Fue un placer conversar contigo.\n").
 
+% Comando de help
 mostrar_ayuda :-
     write("Bot: Puedo responder preguntas como:\n"),
     write("\n  --- Lenguajes de Programacion ---\n"),
@@ -428,7 +425,7 @@ mostrar_ayuda :-
     write("  que paso en ufc 328\n"),
     write("  record de khamzat chimaev\n"),
     write("  estilo de alex pereira\n"),
-    write("\n  --- Sinonimos (2.4) ---\n"),
+    write("\n  --- Sinonimos ---\n"),
     write("  sinonimos de adn\n"),
     write("  son sinonimos ia y inteligencia_artificial\n"),
     write("  cr es sinonimo de costa_rica\n"),
@@ -440,52 +437,55 @@ mostrar_ayuda :-
     write("  salir\n").
 
 
-% =========================================================
-%  HELPERS DE IMPRESION
-% =========================================================
+%  Helpers de impresion y manejo de listas
 
+% Estas funciones ayudan a formatear la salida de listas y resultados complejos
 escribir_lista([H]) :-
     write(H), nl.
 escribir_lista([H|T]) :-
     write(H), write(', '),
     escribir_lista(T).
 
+% Da los tops rankeados de la division dada una lista de rankeados.
 top_ranking(Division, N, Lista) :-
     findall(Pos-Nombre, rankeado(Division, Pos, Nombre), Pairs),
     Pairs \= [],
     keysort(Pairs, Sorted),
     tomar(N, Sorted, Lista).
 
+% Define un ranking formateado a partir de una lista de Pos-Nombre.
 tomar(0, _, []) :- !.
 tomar(_, [], []) :- !.
 tomar(N, [H|T], [H|R]) :-
     N1 is N - 1,
     tomar(N1, T, R).
 
+% Escribe un ranking formateado a partir de una lista de Pos-Nombre.
 escribir_ranking([]).
 escribir_ranking([Pos-Nombre|T]) :-
     format("  #~d ~w~n", [Pos, Nombre]),
     escribir_ranking(T).
 
+% Escribe una lista de items formateada con comas.
 escribir_eventos([]).
 escribir_eventos([Num-Titulo-Fecha-Ganador|T]) :-
     format("  UFC ~d: ~w (~w) - ganador estelar: ~w~n", [Num, Titulo, Fecha, Ganador]),
     escribir_eventos(T).
 
+% Escribe una lista de peleas formateada a partir de una lista de A-B-Ganador-Metodo.
 peleas_del_evento(Num, Peleas) :-
     findall(A-B-Ganador-Metodo, pelea(Num, A, B, Ganador, Metodo), Peleas).
 
+% Escribe peleas formateadas a partir de una lista de A-B-Ganador-Metodo.
 escribir_peleas([]).
 escribir_peleas([A-B-Ganador-Metodo|T]) :-
     format("  ~w vs ~w -> ~w (~w)~n", [A, B, Ganador, Metodo]),
     escribir_peleas(T).
 
 
-% =========================================================
-%  AUXILIAR: EXTRAER PAR DE TERMINOS PARA SINONIMOS
+% Extrae par de terminos para los sinonimos a partir de frases como "X es sinonimo de Y" o "X significa Y".
 %  Parsea "son sinonimos ia y inteligencia_artificial"
 %  o "olvidar sinonimo cr de costa_rica"
-% =========================================================
 
 extraer_par_sinonimos(Entrada, A, B) :-
     extraer_despues_de_prefijos(Entrada,

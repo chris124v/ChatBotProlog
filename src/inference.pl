@@ -1,4 +1,4 @@
-%  seccion 2.6: Motor de Inferencias Lógicas
+%  Inferencias Lógicas
 %
 %  Este módulo implementa inferencias lógicas simples
 %  para generar conclusiones a partir de los hechos
@@ -122,8 +122,8 @@ sirve_para_inferido(X, Uso) :-
 %      porque ambos son animales.
 %
 % Aplicación: El chatbot responde "¿están relacionados?"
-%   "¿relacionados khamzat y strickland?"
-%   Respuesta: Sí, ambos son luchadores de peso medio.
+%   "¿relacionados prolog y haskell?"
+%   Respuesta: Sí, ambos son lenguajes de programación.
  
 relacionados(X, Y) :-
     X \= Y,

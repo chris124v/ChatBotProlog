@@ -1,6 +1,6 @@
 
 %  Tema: Lenguajes de programacion y conceptos de Ciencias de la Computacion.
-%  Autor: Andrey Jimenez
+%  Andrey Jimenez
 
 
 %  Declaraciones Dinamicas y Multifile

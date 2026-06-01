@@ -1,4 +1,5 @@
-%  Tema: Ciencias, Geografia, Historia y Arte/Cultura
+% Tema: Ciencias, Geografia, Historia y Arte/Cultura
+% Daniel Arce
 
 :- dynamic concepto/2.
 :- multifile concepto/2.
@@ -19,10 +20,7 @@
 %    sinonimo/2    - equivalencias entre terminos
 %    sirve_para/2  - usos principales de un concepto
 
-
-% ============================================================
-%  TECNOLOGIA E INFORMATICA
-% ============================================================
+% Tecnologia e Informatica
 
 concepto(inteligencia_artificial,
     'campo de la computacion que crea sistemas capaces de realizar tareas que requieren inteligencia humana').
@@ -77,9 +75,7 @@ sirve_para(algoritmo,
     'resolver problemas computacionales de forma sistematica y reproducible').
 
 
-% ============================================================
-%  CIENCIAS NATURALES
-% ============================================================
+% Ciencias Naturales
 
 concepto(fotosintesis,
     'proceso por el cual las plantas convierten luz solar, agua y CO2 en glucosa y oxigeno').
@@ -140,9 +136,7 @@ sirve_para(termodinamica,
     'disenar motores, refrigeradores y analizar transferencia de energia').
 
 
-% ============================================================
-%  GEOGRAFIA
-% ============================================================
+% Geografia
 
 concepto(costa_rica,
     'pais centroamericano conocido por su biodiversidad, areas protegidas y politicas ambientales').
@@ -186,9 +180,7 @@ sirve_para(oceano_pacifico,
     'regular el clima global, proveer recursos pesqueros y conectar continentes').
 
 
-% ============================================================
-%  HISTORIA
-% ============================================================
+% Historia
 
 concepto(revolucion_francesa,
     'periodo de transformacion politica y social en Francia entre 1789 y 1799').
@@ -227,9 +219,7 @@ sirve_para(renaissance,
     'impulsar el arte, la ciencia y el pensamiento critico en Europa').
 
 
-% ============================================================
-%  ARTE Y CULTURA
-% ============================================================
+% Arte y Cultura
 
 concepto(impresionismo,
     'movimiento pictorico del siglo XIX caracterizado por capturar la luz y el instante sobre formas definidas').

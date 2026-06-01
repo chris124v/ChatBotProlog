@@ -1,14 +1,5 @@
-
 %  Tema: Slang, Memes y Vocabulario Coloquial de Internet.
-%  Autor: Grupo de Estudiantes
-%  Base de Conocimiento B - Enfocada en cultura digital moderna
-
-
-%  Declaraciones Dinamicas y Multifile
-%
-%  Estas declaraciones le dicen a Prolog que los predicados
-%  pueden cambiar durante la ejecucion (usando assertz/retract).
-%  Sin esto, Prolog no permitiria agregar hechos en tiempo real.
+%  Isaac Villalobos
 
 :- dynamic concepto/2.
 :- multifile concepto/2.
@@ -18,22 +9,15 @@
 :- multifile tiene/2.
 :- dynamic sinonimo/2.
 :- multifile sinonimo/2.
-:- dynamic contexto_uso/2.
-:- multifile contexto_uso/2.
-:- dynamic contrario/2.
-:- multifile contrario/2.
 
 
-%  Organizada en cinco tipos de hechos:
+%  Organizada en cuatro tipos de hechos:
 %    concepto/2        - define que ES algo
 %    es_un/2           - establece jerarquias de categoria
 %    tiene/2           - describe propiedades de un concepto
 %    sinonimo/2        - equivalencias entre terminos
-%    contexto_uso/2    - contextos donde se usa
-%    contrario/2       - antonimos y conceptos opuestos
 
-
-%  ========== DEFINICIONES DE CONCEPTOS ==========
+%  Definicion de conceptos clave de la cultura de internet, memes y slang
 %  Cada hecho responde "que es" para un termino especifico.
 
 %  Conceptos sobre Apariencia y Atractivo
@@ -183,7 +167,7 @@ concepto('NFT',
     'activo digital unico no fungible, certificado mediante blockchain para coleccionismo').
 
 
-%  ========== JERARQUIAS DE CATEGORIAS ==========
+%  Jerarquia de Categorias
 %  es_un/2 establece relaciones taxonomicas permitiendo inferencia transitiva
 
 %  Tipos de Personas
@@ -246,7 +230,7 @@ es_un(comportamiento_obsesivo,  comportamiento_negativo).
 es_un(comportamiento_negativo,  comportamiento).
 
 
-%  ========== PROPIEDADES ==========
+%  Propiedades
 %  tiene/2 describe caracteristicas y atributos inherentes
 
 %  Propiedades de Sigma
@@ -290,7 +274,7 @@ tiene(toxic,        negatividad_contagiosa).
 tiene(toxic,        dano_ambiental).
 
 
-%  ========== SINONIMOS ==========
+%  Sinonimos
 %  Permiten entender variantes y abreviaciones
 
 sinonimo(sigma,             sigma_male).
@@ -335,52 +319,7 @@ sinonimo(flex,              presumir).
 sinonimo(streaming,         transmision_viva).
 
 
-%  ========== CONTEXTOS DE USO ==========
-%  contexto_uso/2 describe donde y como se utiliza cada termino
-
-contexto_uso(brainrot,      'redes sociales, TikTok, YouTube Shorts').
-contexto_uso(sigma,         'comunidades de autoayuda masculina, sigma grindset').
-contexto_uso(aura,          'describe presencia de personas influyentes o celebridades').
-contexto_uso(no_cap,        'conversaciones casual online, expresion de sinceridad').
-contexto_uso(based,         'debates politicos, redes sociales, foros online').
-contexto_uso('W',             'videojuegos, competiciones, comparaciones').
-contexto_uso('L',             'videojuegos, competiciones, critica de fracasos').
-contexto_uso(simp,          'critica de seguidores de contenido creadores').
-contexto_uso(sus,           'videojuegos tipo Among Us, deteccion de mentiras').
-contexto_uso(rizzz,         'cortejo, atractivo romantico, seduccion').
-contexto_uso(doom_scrolling, 'habitos de redes sociales dañinos').
-contexto_uso(ghosting,      'relaciones romanticas, citas online').
-contexto_uso(ratio,         'Twitter, debates online, dominio argumentativo').
-contexto_uso(touch_grass,   'invitacion ironica a desconectarse de internet').
-contexto_uso(looksmaxxing,  'comunidades de mejora personal, gym culture').
-contexto_uso(mid,           'evaluacion de contenido, peliculas, musica').
-contexto_uso(toxic,         'ambientes online, videojuegos competitivos').
-contexto_uso(cringe,        'reaccion a contenido socialmente incomodo').
-contexto_uso(mewing,        'comunidades de belleza y atractivo').
-contexto_uso(copium,        'cuando alguien se consuela con falsas esperanzas').
-
-
-%  ========== CONCEPTOS OPUESTOS ==========
-%  contrario/2 define antonimos y conceptos opuestos
-
-contrario('W',           'L').
-contrario('L',           'W').
-contrario(based,       normie).
-contrario(sigma,       npc).
-contrario(npc,         sigma).
-contrario(chad,        incel).
-contrario(top_tier,    low_tier).
-contrario(low_tier,    top_tier).
-contrario(redpill,     bluepill).
-contrario(bluepill,    redpill).
-contrario(brainrot,    clarity_mental).
-contrario(toxic,       supportive).
-contrario(broke,       rich).
-contrario(down_bad,    thriving).
-contrario(cope,        aceptar_realidad).
-
-
-%  ========== MÁS CONCEPTOS DE INTERNET CULTURE ==========
+%  Mas conceptos
 
 %  Conceptos sobre Memes y Trending
 concepto(doge,
@@ -575,7 +514,7 @@ concepto(rarity,
     'item coleccionable que es escaso aumentando su valor en mercado secundario').
 
 
-%  ========== MÁS JERARQUIAS DE CATEGORIAS ==========
+%  jerarquias
 
 es_un(doge,                 meme_iconico).
 es_un(wojak,                meme_iconico).
@@ -686,7 +625,7 @@ es_un(hypebeast,            tipo_comprador).
 es_un(practica_compra,      comportamiento_comprador).
 
 
-%  ========== MÁS PROPIEDADES ==========
+%  Propiedades
 
 tiene(brainrot,             exposicion_constante_contenido).
 tiene(brainrot,             deterioro_atencion).
@@ -732,7 +671,7 @@ tiene(cancel_culture,       posible_injusticia).
 tiene(cancel_culture,       castigo_social).
 
 
-%  ========== MÁS SINONIMOS ==========
+% Sinonimos
 
 sinonimo(poggers,           pog).
 sinonimo('OMEGALUL',          'OMEGALUL_laugh').
@@ -768,70 +707,4 @@ sinonimo(orbit,             orbiting).
 sinonimo(stan,              seguidor_devoted).
 sinonimo(meme,              contenido_conico).
 
-
-%  ========== MÁS CONTEXTOS DE USO ==========
-
-contexto_uso(poggers,           'Twitch chat, reacciones a momentos increibles, entusiasmo gaming').
-contexto_uso(monkas,            'Twitch chat, expresar nerviosismo antes de momento importante').
-contexto_uso('OMEGALUL',          'Twitch chat, reacciones extremas a momentos comicos').
-contexto_uso(gaming,            'Discord, Twitch, YouTube, Reddit comunidades gaming').
-contexto_uso(clout,             'redes sociales, economia creador, influenciadores').
-contexto_uso(hustle,            'motivational posts, entrepreneurship, sigma content').
-contexto_uso(grindset,          'auto mejora, contenido motivacional, finanzas personales').
-contexto_uso(viral,             'TikTok, Twitter, YouTube, cualquier red social').
-contexto_uso(algorithm,         'critica de redes sociales, teoria conspiradora online').
-contexto_uso(engagement,        'analisis de redes sociales, marketing digital').
-contexto_uso(clickbait,         'YouTube, TikTok, articulos online').
-contexto_uso(shipping,          'fandoms de series, peliculas, animes').
-contexto_uso(fanart,            'DeviantArt, Twitter, comunidades fandom').
-contexto_uso(fan_fiction,       'Archive of Our Own, Fanfiction.net, Wattpad').
-contexto_uso(pwn,              'videojuegos competitivos, mensajes de victoria').
-contexto_uso(griefing,          'servidores de juegos multijugador, reporte de infracciones').
-contexto_uso(gank,              'MOBA games, videojuegos por equipo').
-contexto_uso(carry,             'League of Legends, Dota 2, videojuegos competitivos').
-contexto_uso(clutch,            'esports, momentos dramáticos finales de partidas').
-contexto_uso(virtue_signaling,  'redes sociales, posts sobre causas sociales').
-contexto_uso(shadow_ban,        'Twitter, Instagram, TikTok sobre restricciones').
-contexto_uso(doxx,              '4chan, imageboard, ciberacoso').
-contexto_uso(shill,             'criptomonedas, esquemas piramidales, estafas online').
-contexto_uso(outrage_culture,   'redes sociales, campañas de cancelacion colectiva').
-contexto_uso(gatekeeping,       'comunidades fandom, juegos, musica, cultura nerd').
-contexto_uso(orbiting,          'redes sociales, relaciones romanticas falidas').
-contexto_uso(benching,          'aplicaciones citas, relaciones casuales').
-contexto_uso(breadcrumbing,     'mensajeria privada, relaciones ambiguas').
-contexto_uso(alt_account,       'Twitter, Reddit, cualquier plataforma anonima').
-contexto_uso(content_creator,   'YouTube, Twitch, TikTok, Instagram').
-contexto_uso(drop,              'Fashion, coleccionables, videojuegos limitados').
-contexto_uso(scalp,             'Nike drops, PlayStation 5, items limitados').
-contexto_uso(hypebeast,         'Instagram, TikTok, comunidades fashion').
-contexto_uso(blue_pilled,       'debates politicos conservadores vs progresista').
-contexto_uso(black_pilled,      'incel communities, extremismo online').
-contexto_uso(catfishing,        'aplicaciones de citas, Facebook, Instagram').
-contexto_uso(deep_fried,        'memes avanzados, comunidades memeing').
-contexto_uso(shitpost,          '4chan, Reddit, Twitter, cualquier red social').
-contexto_uso(dank_meme,         'Reddit, Instagram meme accounts, comunidades meme').
-
-
-%  ========== MÁS CONCEPTOS OPUESTOS ==========
-
-contrario(creator,         lurker).
-contrario(lurker,          creator).
-contrario(authentic_self,  persona_falsa).
-contrario(persona_falsa,   authentic_self).
-contrario(viral,           obscuro).
-contrario(influencer,      desconocido).
-contrario(hustle,          procrastinacion).
-contrario(hodl,            panic_sell).
-contrario(chad,            simp).
-contrario(simp,            chad).
-contrario(noob,            pro_player).
-contrario(pro_player,      noob).
-contrario(carry,           feeder).
-contrario(throw,           clutch).
-contrario(virtue_signaling, genuine_activism).
-contrario(fake_news,       fact_checked).
-contrario(catfishing,      authentic_meeting).
-contrario(hypebeast,       minimalist).
-contrario(scalp,           fair_price).
-contrario(outrage,         understanding).
 

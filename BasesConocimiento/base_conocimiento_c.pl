@@ -1,5 +1,5 @@
 %  Tema: Ultimate Fighting Championship - MMA (UFC)
-%  Autor: Christopher Vargas
+% Christopher Vargas
  
 %  Declaraciones dinamicas
  

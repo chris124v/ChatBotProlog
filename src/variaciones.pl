@@ -1,4 +1,3 @@
-% =========================================================
 % Variaciones en de preguntas
 %
 %  Este modulo permite que el chatbot interprete la misma
@@ -9,7 +8,6 @@
 %    2. Normalizacion        - quita signos, acentos comunes, mayusculas
 %    3. Resolucion sinonimos - resuelve el concepto antes de buscar
 %    4. Deteccion por tema   - palabras clave sin estructura de pregunta
-% =========================================================
 
 %  1. Patrones de preguntas
 

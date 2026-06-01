@@ -164,7 +164,7 @@ extraer_dos_conceptos(Entrada, X, Y) :-
 %  evento_ufc/4, pelea/5, record_luchador/3, estilo_lucha/2.
 
 
-% Tokenizacion simple (quita puntuacion comun)
+% Tokenizacion simple
 
 tokenizar(Str, Tokens) :-
     split_string(Str, " \t\n", " \t\n?!.,:;()[]{}\"", Raw),
@@ -183,7 +183,7 @@ extraer_despues_de_prefijos(Entrada, [_|T], Resto) :-
     extraer_despues_de_prefijos(Entrada, T, Resto).
 
 
-% Join de tokens con '_' para mapear "peso pesado" -> peso_pesado 
+% Join de tokens con '_' para mapear "peso pesado" como peso_pesado 
 
 join_tokens_con_guion_bajo([H], H) :- !.
 join_tokens_con_guion_bajo([H|T], Out) :-
