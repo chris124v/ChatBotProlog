@@ -116,22 +116,77 @@ El chatbot presenta un menú interactivo donde puedes:
 
 ---
 
-### Ejemplo de Interacción
- 
+## Flujo de Trabajo Arquitectura
+
+Recorrido típico de un usuario que prueba el chatbot según la especificación del proyecto (secciones 2.1 a 2.7) hasta salir de la sesión.
+
+1. Inicio: El usuario ejecuta `main.pl` desde `src/`; se cargan las bases de conocimiento iniciales y los módulos (`conversation`, `inference`, `utils`, `sinonimos`, `variaciones`). **(2.1, 2.7)**
+2. Bienvenida: `inicio/0` muestra el mensaje de bienvenida e invita a escribir `ayuda`; entra al bucle recursivo `conversar/0`. **(2.7)**
+3. Lectura: El usuario escribe en consola; `utils.pl` normaliza la entrada (minúsculas). **(2.2)**
+4. ¿Salir?: Si la entrada es `salir`, `adios`, `exit`, etc., el bot se despide y termina la ejecución. **(2.7)**
+5. Deteccion de Intencion: `conversation.pl` analiza patrones y palabras clave (`detectar_intencion/3`). **(2.2, 2.5)**
+6. Variaciones de Pregunta: Si no hubo coincidencia exacta, `variaciones.pl` interpreta alias, quita signos/acentos y resuelve la misma intención (p. ej. *explique prolog* ≈ *qué es prolog*). **(2.5)**
+7. Consulta a las bases: Preguntas de definición, uso, tipo o propiedades consultan hechos en `BasesConocimiento/` (`concepto/2`, `es_un/2`, `tiene/2`, `sirve_para/2`, etc.).
+8. Inferencias: `inference.pl` aplica reglas: `es_tipo/2` (jerarquía), `tiene_inferido/2`, `sirve_para_inferido/2`, `relacionados/2` y `concepto_resuelto/2` con sinónimos.
+9. Sinonimos: El usuario puede enseñar (`aprender que X es sinónimo de Y`), listar (`sinonimos de X`) o verificar equivalencias; `sinonimos.pl` valida y usa `assertz/1` o `retract/1`.
+10. Aprendizaje Explicito: Con `aprender que X es Y` se guarda un hecho nuevo con `assertz(concepto/2)` sin diálogo interactivo.
+11. Aprendizaje Interactivo: Si no hay respuesta en la base, el bot indica que no conoce el tema, pide definición/uso/tipo/propiedad al usuario y persiste con `assertz/1` para reutilizarlo después.
+12. Entrada no reconocida: Si ningún patrón coincide, responde que no entendió y sugiere `ayuda`. **(2.2)**
+13. Retroalimentacion: El bot imprime la respuesta en consola (`write/1`, `format/2`).
+14. Recursion: Vuelve a `conversar/0` (recursión, sin bucles imperativos) hasta que el usuario elija salir. **(2.7)**
+
+```mermaid
+flowchart TD
+    A([Inicio de sesión]) --> B["1. Carga del sistema<br/>main.pl + bases A-D<br/>(2.1 Base de conocimiento)"]
+    B --> C["2. Bienvenida<br/>inicio → conversar<br/>(2.7 Flujo conversacional)"]
+    C --> D["3. Lectura en consola<br/>utils.pl: leer_entrada<br/>(2.2 Conversación)"]
+    D --> E{"4. ¿Salir?<br/>salir / adios / exit"}
+    E -- Sí --> Z([Fin: despedirse])
+    E -- No --> F["5. Detección de intención<br/>conversation.pl: detectar_intencion"]
+    F --> G{"6. ¿Intención<br/>reconocida?"}
+    G -- No --> H["variaciones.pl:<br/>interpreta_variacion<br/>(2.5 Variaciones)"]
+    H --> I{"¿Patrón<br/>flexible?"}
+    I -- No --> J["12. No reconocido<br/>sugerir ayuda<br/>(2.2)"]
+    I -- Sí --> K["7. Manejar intención<br/>manejar/2"]
+    G -- Sí --> K
+    K --> L{"Tipo de<br/>consulta"}
+    L -- "Definición / uso /<br/>tipo / propiedades" --> M["7-8. Consulta KB + inferencias<br/>concepto, es_tipo, tiene_inferido,<br/>sirve_para_inferido, relacionados<br/>(2.1, 2.6)"]
+    M --> N{"¿Existe<br/>respuesta?"}
+    N -- Sí --> R["13. Mostrar respuesta<br/>en consola"]
+    N -- No --> O["11. Aprendizaje interactivo<br/>pedir dato al usuario → assertz<br/>(2.3)"]
+    O --> R
+    L -- "Aprender concepto" --> P["10. assertz(concepto/2)<br/>aprender que X es Y<br/>(2.3)"]
+    P --> R
+    L -- "Sinónimos" --> Q["9. sinonimos.pl<br/>aprender / listar / verificar<br/>assertz o retract<br/>(2.4)"]
+    Q --> R
+    L -- "Relacionados" --> M
+    L -- "Ayuda" --> S["Mostrar comandos<br/>mostrar_ayuda"]
+    S --> R
+    J --> R
+    R --> C
+```
 
 ---
  
 ## Estructura del Proyecto
- 
+
 ```
 ChatBotProlog/
-├── chatbot.pl              # Archivo principal del chatbot
-├── base_conocimiento.pl    # Base de conocimiento inicial (hechos y reglas)
-├── predicados_utiles.pl    # Predicados auxiliares
-├── README.md               # Este archivo
-└── .gitignore              # Archivos a ignorar en Git
+├── README.md
+├── src/
+│   ├── main.pl             # Punto de entrada: carga módulos y bases de conocimiento
+│   ├── conversation.pl     # Flujo conversacional (lectura, intenciones, respuestas)
+│   ├── inference.pl        # Motor de inferencias (es_tipo, tiene_inferido, relacionados)
+│   ├── utils.pl            # Utilidades de texto (normalización, extracción de conceptos)
+│   ├── sinonimos.pl        # Aprendizaje y consulta de sinónimos
+│   └── variaciones.pl      # Interpretación de variaciones de preguntas
+└── BasesConocimiento/
+    ├── base_conocimiento_a.pl   # Andrey — lenguajes y computación (50+ hechos)
+    ├── base_conocimiento_b.pl   # Isaac — slang y memes de internet (50+ hechos)
+    ├── base_conocimiento_c.pl   # Christopher — UFC y artes marciales (50+ hechos)
+    ├── base_conocimiento_d.pl   # Daniel — ciencias y temas generales (50+ hechos)
+    └── Preguntas.md             # Casos de prueba y ejemplos de consultas
 ```
- 
 ---
 
 ## Manual de Usuario
