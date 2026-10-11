@@ -1,6 +1,10 @@
 # ChatBotProlog Inteligente con Programación Lógica
  
 El Chatbot Inteligente es una aplicación de consola desarrollada en Prolog que permite a los usuarios mantener conversaciones interactivas, hacer preguntas sobre una base de conocimiento, aprender nueva información dinámicamente y explorar inferencias lógicas. El sistema funciona como una herramienta de diálogo que responde preguntas, maneja sinónimos y genera nuevo conocimiento durante la ejecución.
+
+![SWI-Prolog](https://img.shields.io/badge/SWI--Prolog-8.0%2B-red)
+![Prolog](https://img.shields.io/badge/Prolog-programaci%C3%B3n%20l%C3%B3gica-blue)
+![Consola](https://img.shields.io/badge/aplicaci%C3%B3n-consola-lightgrey)
  
 ---
  
